@@ -1,1 +1,287 @@
 index.html
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101827">
+<title>Future Self</title>
+<style>
+*{box-sizing:border-box}
+body{
+margin:0;background:#101827;color:#f8fafc;
+font-family:Arial,sans-serif;min-height:100vh;
+}
+main{max-width:700px;margin:auto;padding:24px 16px 50px}
+header{text-align:center;padding:25px 0}
+.logo{font-size:45px;color:#a78bfa}
+h1{font-size:34px;margin:8px}
+p{color:#cbd5e1;line-height:1.7}
+.card{
+background:#1e293b;border:1px solid #334155;
+padding:20px;border-radius:18px;margin:16px 0;
+}
+button,select,input,textarea{
+width:100%;padding:13px;border-radius:11px;
+font-size:16px;margin-top:10px;
+}
+button{border:0;background:#a78bfa;color:#101827;font-weight:bold}
+.secondary{background:#334155;color:white}
+input,select,textarea{background:#0f172a;color:white;border:1px solid #475569}
+textarea{min-height:100px;resize:vertical}
+.hidden{display:none}
+.small{font-size:13px;color:#94a3b8}
+.result{white-space:pre-line;background:#0f172a;padding:14px;border-radius:12px;margin-top:12px}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div class="logo">✦</div>
+<h1>Future Self</h1>
+<p id="intro">افهم نفسك. ابنِ مستقبلك.</p>
+<select id="language" onchange="changeLanguage()">
+<option value="ar">العربية</option>
+<option value="es">Español</option>
+<option value="fr">Français</option>
+<option value="en">English</option>
+</select>
+</header>
+
+<section class="card">
+<h2 id="welcome">مرحباً بك في Future Self</h2>
+<p id="description">مساحة تساعدك على فهم نفسك والتخطيط لحياتك وفهم حيواناتك الأليفة.</p>
+</section>
+
+<section class="card">
+<h2 id="humanTitle">🧠 اكتشاف الذات</h2>
+<p id="humanText">ابدأ بالتعرف على عاداتك وأهدافك ونقاط قوتك.</p>
+<button onclick="show('human')" id="humanButton">اكتشف نفسي</button>
+</section>
+
+<section class="card">
+<h2 id="animalTitle">🐾 عالم الحيوانات</h2>
+<p id="animalText">تابع سلوك حيوانك الأليف وتغيراته اليومية.</p>
+<button class="secondary" onclick="show('animal')" id="animalButton">فهم حيواني</button>
+</section>
+
+<section class="card hidden" id="human">
+<h2 id="humanFormTitle">اكتشف ذاتك</h2>
+<label id="goalLabel">ما هدفك الحالي؟</label>
+<select id="goal">
+<option value="habits">تحسين العادات</option>
+<option value="confidence">زيادة الثقة بالنفس</option>
+<option value="work">تطوير الحياة المهنية</option>
+<option value="relationships">تحسين العلاقات</option>
+<option value="health">تحسين نمط الحياة</option>
+</select>
+<label id="strengthLabel">ما أكثر شيء تراه نقطة قوة لديك؟</label>
+<textarea id="strength" placeholder="اكتب إجابتك..."></textarea>
+<label id="challengeLabel">ما أكبر تحدٍ تواجهه؟</label>
+<textarea id="challenge" placeholder="اكتب إجابتك..."></textarea>
+<button onclick="saveHuman()" id="saveHuman">حفظ وتحليل إجاباتي</button>
+<div id="humanResult" class="result hidden"></div>
+</section>
+
+<section class="card hidden" id="animal">
+<h2 id="animalFormTitle">متابعة الحيوان</h2>
+<label id="typeLabel">نوع الحيوان</label>
+<select id="type">
+<option value="dog">🐕 كلب</option>
+<option value="cat">🐈 قط</option>
+</select>
+<label id="nameLabel">اسم الحيوان</label>
+<input id="petName" placeholder="اسم الحيوان">
+<label id="behaviorLabel">كيف كان سلوكه اليوم؟</label>
+<select id="behavior">
+<option value="normal">طبيعي</option>
+<option value="quiet">هادئ أكثر من المعتاد</option>
+<option value="agitated">قلق أو مضطرب</option>
+<option value="aggressive">عدواني بشكل غير معتاد</option>
+<option value="withdrawn">منعزل أو مختبئ</option>
+</select>
+<label id="symptomLabel">هل لاحظت تغيراً أو ألماً؟</label>
+<textarea id="symptoms" placeholder="صف ما لاحظته..."></textarea>
+<button onclick="saveAnimal()" id="saveAnimal">حفظ الملاحظة</button>
+<div id="animalResult" class="result hidden"></div>
+<p class="small" id="animalWarning">هذه المتابعة لا تشخّص الأمراض. إذا ظهرت صعوبة تنفس أو ألم شديد أو انهيار أو تدهور مفاجئ، اطلب مساعدة بيطرية عاجلة.</p>
+</section>
+
+<section class="card">
+<h2 id="historyTitle">📖 سجلاتي</h2>
+<p id="historyText">ملاحظاتك المحفوظة على هذا الجهاز.</p>
+<div id="history"></div>
+<button class="secondary" onclick="clearHistory()" id="clearButton">مسح السجلات</button>
+</section>
+
+<footer style="text-align:center">
+<p class="small">Future Self © 2026</p>
+<p class="small" id="footerText">مستقبلك يبدأ بخطوة اليوم.</p>
+</footer>
+</main>
+
+<script>
+const translations={
+ar:{
+intro:"افهم نفسك. ابنِ مستقبلك.",
+welcome:"مرحباً بك في Future Self",
+description:"مساحة تساعدك على فهم نفسك والتخطيط لحياتك وفهم حيواناتك الأليفة.",
+humanTitle:"🧠 اكتشاف الذات",humanText:"ابدأ بالتعرف على عاداتك وأهدافك ونقاط قوتك.",humanButton:"اكتشف نفسي",
+animalTitle:"🐾 عالم الحيوانات",animalText:"تابع سلوك حيوانك الأليف وتغيراته اليومية.",animalButton:"فهم حيواني",
+humanFormTitle:"اكتشف ذاتك",goalLabel:"ما هدفك الحالي؟",strengthLabel:"ما أكثر شيء تراه نقطة قوة لديك؟",challengeLabel:"ما أكبر تحدٍ تواجهه؟",saveHuman:"حفظ وتحليل إجاباتي",
+animalFormTitle:"متابعة الحيوان",typeLabel:"نوع الحيوان",nameLabel:"اسم الحيوان",behaviorLabel:"كيف كان سلوكه اليوم؟",symptomLabel:"هل لاحظت تغيراً أو ألماً؟",saveAnimal:"حفظ الملاحظة",
+historyTitle:"📖 سجلاتي",historyText:"ملاحظاتك المحفوظة على هذا الجهاز.",clearButton:"مسح السجلات",footerText:"مستقبلك يبدأ بخطوة اليوم.",
+animalWarning:"هذه المتابعة لا تشخّص الأمراض. عند ظهور أعراض خطيرة اطلب مساعدة بيطرية عاجلة.",
+goals:["تحسين العادات","زيادة الثقة بالنفس","تطوير الحياة المهنية","تحسين العلاقات","تحسين نمط الحياة"],
+behaviors:["طبيعي","هادئ أكثر من المعتاد","قلق أو مضطرب","عدواني بشكل غير معتاد","منعزل أو مختبئ"],
+result:"تم حفظ إجاباتك. راجع أهدافك وحدد خطوة صغيرة قابلة للتنفيذ هذا الأسبوع.",
+animalResult:"تم حفظ الملاحظة. راقب التغيرات وقارنها بالأيام السابقة."
+},
+es:{
+intro:"Conócete. Construye tu futuro.",welcome:"Bienvenido a Future Self",
+description:"Un espacio para conocerte, planificar tu vida y comprender a tus animales.",
+humanTitle:"🧠 Descubre tu potencial",humanText:"Conoce tus hábitos, objetivos y fortalezas.",humanButton:"Descubrirme",
+animalTitle:"🐾 Mundo animal",animalText:"Observa el comportamiento y los cambios diarios de tu mascota.",animalButton:"Entender mi mascota",
+humanFormTitle:"Descubre tu interior",goalLabel:"¿Cuál es tu objetivo actual?",strengthLabel:"¿Cuál es tu mayor fortaleza?",challengeLabel:"¿Cuál es tu mayor desafío?",saveHuman:"Guardar mis respuestas",
+animalFormTitle:"Seguimiento animal",typeLabel:"Tipo de animal",nameLabel:"Nombre del animal",behaviorLabel:"¿Cómo se comportó hoy?",symptomLabel:"¿Observaste cambios o dolor?",saveAnimal:"Guardar observación",
+historyTitle:"📖 Mis registros",historyText:"Tus notas guardadas en este dispositivo.",clearButton:"Borrar registros",footerText:"Tu futuro comienza hoy.",
+animalWarning:"Este seguimiento no diagnostica enfermedades. Ante síntomas graves, busca atención veterinaria urgente.",
+goals:["Mejorar hábitos","Aumentar confianza","Desarrollo profesional","Mejorar relaciones","Mejorar estilo de vida"],
+behaviors:["Normal","Más tranquilo de lo habitual","Ansioso o inquieto","Agresivo inusual","Aislado o escondido"],
+result:"Respuestas guardadas. Elige una pequeña acción para esta semana.",
+animalResult:"Observación guardada. Compara los cambios con los días anteriores."
+},
+fr:{
+intro:"Mieux te connaître. Construire ton avenir.",welcome:"Bienvenue sur Future Self",
+description:"Un espace pour te comprendre, planifier ta vie et mieux comprendre tes animaux.",
+humanTitle:"🧠 Découvre ton potentiel",humanText:"Explore tes habitudes, tes objectifs et tes forces.",humanButton:"Me découvrir",
+animalTitle:"🐾 Monde animal",animalText:"Observe le comportement et les changements de ton animal.",animalButton:"Comprendre mon animal",
+humanFormTitle:"Découvre-toi",goalLabel:"Quel est ton objectif actuel ?",strengthLabel:"Quelle est ta plus grande force ?",challengeLabel:"Quel est ton plus grand défi ?",saveHuman:"Enregistrer mes réponses",
+animalFormTitle:"Suivi animal",typeLabel:"Type d'animal",nameLabel:"Nom de l'animal",behaviorLabel:"Comment s'est-il comporté aujourd'hui ?",symptomLabel:"As-tu observé des changements ou une douleur ?",saveAnimal:"Enregistrer l'observation",
+historyTitle:"📖 Mes données",historyText:"Tes notes enregistrées sur cet appareil.",clearButton:"Effacer les données",footerText:"Ton avenir commence aujourd'hui.",
+animalWarning:"Ce suivi ne diagnostique pas les maladies. En cas de symptômes graves, consulte rapidement un vétérinaire.",
+goals:["Améliorer les habitudes","Confiance en soi","Carrière professionnelle","Relations","Mode de vie"],
+behaviors:["Normal","Plus calme que d'habitude","Anxieux ou agité","Agressif inhabituel","Isolé ou caché"],
+result:"Réponses enregistrées. Choisis une petite action pour cette semaine.",
+animalResult:"Observation enregistrée. Compare les changements avec les jours précédents."
+},
+en:{
+intro:"Understand yourself. Build your future.",welcome:"Welcome to Future Self",
+description:"A space to understand yourself, plan your life and understand your pets.",
+humanTitle:"🧠 Discover your potential",humanText:"Explore your habits, goals and strengths.",humanButton:"Discover myself",
+animalTitle:"🐾 Animal world",animalText:"Observe your pet's behavior and daily changes.",animalButton:"Understand my pet",
+humanFormTitle:"Discover yourself",goalLabel:"What is your current goal?",strengthLabel:"What is your greatest strength?",challengeLabel:"What is your biggest challenge?",saveHuman:"Save my answers",
+animalFormTitle:"Animal tracking",typeLabel:"Animal type",nameLabel:"Animal name",behaviorLabel:"How did your pet behave today?",symptomLabel:"Did you notice any changes or pain?",saveAnimal:"Save observation",
+historyTitle:"📖 My records",historyText:"Your notes saved on this device.",clearButton:"Clear records",footerText:"Your future starts today.",
+animalWarning:"This tracking does not diagnose illness. Seek urgent veterinary care for severe symptoms.",
+goals:["Improve habits","Build confidence","Career development","Improve relationships","Improve lifestyle"],
+behaviors:["Normal","Quieter than usual","Anxious or restless","Unusually aggressive","Withdrawn or hiding"],
+result:"Answers saved. Choose one small action for this week.",
+animalResult:"Observation saved. Compare changes with previous days."
+}
+};
+
+function changeLanguage(){
+const lang=document.getElementById("language").value;
+const t=translations[lang];
+document.documentElement.lang=lang;
+document.documentElement.dir=lang==="ar"?"rtl":"ltr";
+Object.keys(t).forEach(k=>{
+const el=document.getElementById(k);
+if(el)el.textContent=t[k];
+});
+document.querySelectorAll("#goal option").forEach((o,i)=>o.textContent=t.goals[i]);
+document.querySelectorAll("#behavior option").forEach((o,i)=>o.textContent=t.behaviors[i]);
+}
+
+function show(id){
+document.getElementById(id).classList.remove("hidden");
+document.getElementById(id).scrollIntoView({behavior:"smooth"});
+}
+
+function getRecords(){
+try{return JSON.parse(localStorage.getItem("futureSelfRecords")||"[]")}
+catch(e){return []}
+}
+
+function saveRecord(record){
+const records=getRecords();
+records.unshift(record);
+localStorage.setItem("futureSelfRecords",JSON.stringify(records));
+displayHistory();
+}
+
+function saveHuman(){
+const lang=document.getElementById("language").value;
+const t=translations[lang];
+const goal=document.getElementById("goal");
+const strength=document.getElementById("strength").value.trim();
+const challenge=document.getElementById("challenge").value.trim();
+if(!strength&&!challenge){
+alert("Please write at least one answer.");
+return;
+}
+saveRecord({
+date:new Date().toLocaleString(),
+kind:"human",
+goal:goal.options[goal.selectedIndex].text,
+strength,challenge
+});
+const result=document.getElementById("humanResult");
+result.textContent=t.result;
+result.classList.remove("hidden");
+}
+
+function saveAnimal(){
+const lang=document.getElementById("language").value;
+const t=translations[lang];
+const name=document.getElementById("petName").value.trim();
+const behavior=document.getElementById("behavior");
+const symptoms=document.getElementById("symptoms").value.trim();
+if(!name){alert("Please enter your pet's name.");return}
+saveRecord({
+date:new Date().toLocaleString(),
+kind:"animal",
+name,
+type:document.getElementById("type").value,
+behavior:behavior.options[behavior.selectedIndex].text,
+symptoms
+});
+const result=document.getElementById("animalResult");
+result.textContent=t.animalResult;
+result.classList.remove("hidden");
+}
+
+function displayHistory(){
+const container=document.getElementById("history");
+const records=getRecords();
+container.innerHTML="";
+if(!records.length){
+container.textContent="No records yet.";
+return;
+}
+records.forEach(r=>{
+const item=document.createElement("div");
+item.className="result";
+const title=document.createElement("strong");
+title.textContent=r.kind==="human"?"🧠 Human":"🐾 "+r.name;
+const details=document.createElement("p");
+details.textContent=r.date+"\n"+(r.goal||r.behavior||"")+"\n"+(r.strength||r.symptoms||"");
+item.append(title,details);
+container.appendChild(item);
+});
+}
+
+function clearHistory(){
+if(confirm("Delete all saved records?")){
+localStorage.removeItem("futureSelfRecords");
+displayHistory();
+}
+}
+
+changeLanguage();
+displayHistory();
+</script>
+</body>
+</html>
