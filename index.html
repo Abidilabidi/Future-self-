@@ -1,335 +1,471 @@
 index.htm
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#101827">
-<title>Future Self ✨</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101629">
+<title>Future Self ✦</title>
 <style>
+:root {
+  --bg:#101629;--panel:#19243b;--panel2:#202e49;
+  --text:#f4f6ff;--muted:#aab5ca;--accent:#a78bfa;
+  --green:#65d6ad;--border:#34415c;--red:#ff8585;
+}
 *{box-sizing:border-box}
-body{margin:0;background:#101827;color:#eef3ff;font-family:Arial,sans-serif;line-height:1.7}
-header{text-align:center;padding:25px;background:linear-gradient(135deg,#172b46,#263d63)}
-h1{color:#7ce6d1;margin:0;font-size:32px}
-header p{margin:5px}
-nav{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;padding:12px;background:#172235;position:sticky;top:0}
-button{cursor:pointer;border:0;border-radius:9px;padding:11px;background:#304968;color:white}
-button.active,.primary{background:#42bda8;color:#10212b;font-weight:bold}
-main{max-width:800px;margin:auto;padding:15px}
-.card{background:#1b293d;border:1px solid #30425c;border-radius:15px;padding:18px;margin:15px 0}
-h2{color:#7ce6d1}
-input,select,textarea{width:100%;padding:12px;margin:6px 0 14px;border-radius:9px;border:1px solid #435773;background:#111e30;color:white;font-size:16px}
-label{display:block;font-weight:bold}
-.primary{width:100%;padding:14px;margin-top:8px}
-.hidden{display:none}
-.result{background:#142f39;border-right:4px solid #42bda8;padding:14px;margin-top:15px;border-radius:9px}
-.item{padding:12px;border-bottom:1px solid #40506a}
-.small{color:#aabbd2;font-size:13px}
-.lang{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin-top:12px}
-footer{text-align:center;padding:25px;color:#8da2bd}
+body{margin:0;background:var(--bg);color:var(--text);
+font-family:system-ui,-apple-system,sans-serif;line-height:1.6}
+header{padding:23px 16px 17px;text-align:center;
+background:linear-gradient(135deg,#202e50,#30224e)}
+header h1{margin:0;font-size:27px}
+header p{margin:5px;color:#d4c8ff}
+select,input,textarea,button{
+font:inherit;border-radius:11px;padding:11px;
+width:100%;border:1px solid var(--border)}
+input,textarea,select{background:#111c32;color:white}
+textarea{min-height:85px;resize:vertical}
+button{background:var(--accent);color:#17132a;
+font-weight:700;border:0;cursor:pointer}
+button.secondary{background:var(--panel2);color:white;
+border:1px solid var(--border)}
+button.danger{background:#632f40;color:white}
+button.small{width:auto;padding:7px 12px;font-size:13px}
+nav{display:flex;gap:7px;padding:12px;overflow-x:auto;
+background:#131e33;position:sticky;top:0;z-index:5}
+nav button{min-width:max-content;width:auto;padding:9px 13px;
+background:var(--panel2);color:white;font-size:13px}
+nav button.active{background:var(--accent);color:#17132a}
+main{max-width:760px;margin:auto;padding:15px}
+section{display:none}
+section.active{display:block}
+.card{background:var(--panel);border:1px solid var(--border);
+border-radius:17px;padding:16px;margin:13px 0}
+h2{font-size:20px;margin:4px 0 14px}
+h3{font-size:16px;margin:5px 0 12px}
+.field{margin:12px 0}
+label{display:block;color:#cbd5e8;margin-bottom:6px;font-size:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.muted{color:var(--muted);font-size:13px}
+.result{background:#111c32;border-right:3px solid var(--green);
+padding:13px;border-radius:10px;margin-top:12px;white-space:pre-wrap}
+.item{background:var(--panel2);padding:12px;border-radius:12px;
+margin:9px 0;overflow-wrap:anywhere}
+.item small{color:var(--muted)}
+.badge{display:inline-block;background:#3a315b;
+color:#d9ccff;border-radius:20px;padding:3px 9px;font-size:12px}
+footer{text-align:center;color:var(--muted);padding:25px;font-size:12px}
+hr{border:0;border-top:1px solid var(--border);margin:16px 0}
+@media(max-width:430px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
 <header>
-<h1>Future Self ✨</h1>
-<p id="tagline">افهم نفسك. ابنِ مستقبلك.</p>
-<div class="lang">
-<button onclick="setLang('ar')">العربية</button>
-<button onclick="setLang('es')">Español</button>
-<button onclick="setLang('fr')">Français</button>
-<button onclick="setLang('en')">English</button>
+<h1>Future Self ✦</h1>
+<p data-t="slogan">افهم اليوم. ابنِ الغد.</p>
+<span class="badge" id="engine">المحرك المحلي نشط</span>
+<div style="max-width:180px;margin:12px auto 0">
+<select id="language" onchange="setLanguage(this.value)">
+<option value="ar">العربية</option>
+<option value="es">Español</option>
+<option value="fr">Français</option>
+<option value="en">English</option>
+</select>
 </div>
 </header>
 
-<nav>
-<button id="nHome" class="active" onclick="tab('home')">الرئيسية</button>
-<button id="nHuman" onclick="tab('human')">🧠 الإنسان</button>
-<button id="nAnimal" onclick="tab('animal')">🐾 الحيوانات</button>
-<button id="nRecords" onclick="tab('records')">📚 سجلاتي</button>
+<nav id="navigation">
+<button class="active" onclick="showTab('home',this)" data-t="home">⌂ الرئيسية</button>
+<button onclick="showTab('human',this)" data-t="human">🧠 الإنسان</button>
+<button onclick="showTab('animals',this)" data-t="animals">🐾 الحيوانات</button>
+<button onclick="showTab('planning',this)" data-t="planning">🗺️ التخطيط</button>
+<button onclick="showTab('decisions',this)" data-t="decisions">⚖️ القرارات</button>
+<button onclick="showTab('records',this)" data-t="records">📚 السجلات</button>
+<button onclick="showTab('settings',this)" data-t="settings">⚙️ الإعدادات</button>
 </nav>
 
 <main>
-<section id="home">
+
+<section id="home" class="active">
 <div class="card">
-<h2 id="welcome">مرحباً بك في Future Self</h2>
-<p id="intro">منظومة تساعدك على فهم نفسك، ومتابعة حياتك، واكتشاف الأنماط، وبناء مستقبل أفضل.</p>
+<h2 data-t="welcome">مرحباً بك في Future Self</h2>
+<p data-t="intro">مساحة لفهم الحاضر وبناء المستقبل، خطوة بخطوة.</p>
+<div class="grid">
+<div class="item"><h3 data-t="human">🧠 الإنسان</h3><span id="humanCount">0</span> <span data-t="recordsCount">سجلات</span></div>
+<div class="item"><h3 data-t="animals">🐾 الحيوانات</h3><span id="animalCount">0</span> <span data-t="recordsCount">سجلات</span></div>
+<div class="item"><h3 data-t="planning">🗺️ التخطيط</h3><span id="planCount">0</span> <span data-t="goals">أهداف</span></div>
+<div class="item"><h3 data-t="decisions">⚖️ القرارات</h3><span id="decisionCount">0</span> <span data-t="recordsCount">سجلات</span></div>
+</div>
 </div>
 <div class="card">
-<h2 id="visionTitle">رؤيتنا</h2>
-<p id="vision">لا ندعي معرفة الغيب أو التنبؤ بالمستقبل. نساعدك على فهم الحاضر واتخاذ قرارات أفضل.</p>
-</div>
-<div class="card">
-<h2 id="startTitle">ابدأ رحلتك</h2>
-<button class="primary" onclick="tab('human')" id="startHuman">🧠 افهم نفسك</button>
-<button class="primary" onclick="tab('animal')" id="startAnimal">🐾 افهم حيوانك</button>
+<h3 data-t="principle">فلسفة Future Self</h3>
+<p data-t="principleText">لا يمكن بناء مستقبل أفضل دون فهم ما يحدث اليوم. كل متابعة صغيرة يمكن أن تساعدك على رؤية الصورة الأكبر.</p>
 </div>
 </section>
 
-<section id="human" class="hidden">
+<section id="human">
 <div class="card">
-<h2 id="humanTitle">🧠 فهم الإنسان</h2>
-<p id="humanDesc">أجب عن الأسئلة لمساعدتك على فهم وضعك الحالي.</p>
-
-<label id="moodLabel">كيف تشعر اليوم؟</label>
-<select id="mood">
-<option value="good">جيد ومستقر</option>
-<option value="normal">عادي</option>
-<option value="stressed">قلق أو متوتر</option>
-<option value="sad">حزين</option>
-<option value="tired">متعب</option>
-</select>
-
-<label id="stressLabel">مستوى الضغط</label>
-<select id="stress">
-<option value="low">منخفض</option>
-<option value="medium">متوسط</option>
-<option value="high">مرتفع</option>
-</select>
-
-<label id="workLabel">العمل والتعلم</label>
-<select id="work">
-<option value="stable">مستقر</option>
-<option value="learning">أتطور وأتعلم</option>
-<option value="searching">أبحث عن فرصة</option>
-<option value="difficult">أواجه صعوبات</option>
-</select>
-
-<label id="sleepLabel">كيف هو نومك؟</label>
-<select id="sleep">
-<option value="good">جيد</option>
-<option value="average">متوسط</option>
-<option value="bad">سيئ</option>
-</select>
-
-<label id="goalLabel">ما هدفك الرئيسي؟</label>
-<input id="goal" placeholder="اكتب هدفك هنا">
-
-<label id="notesLabel">اكتب ما تريد فهمه عن حياتك</label>
-<textarea id="humanNotes" rows="4"></textarea>
-
-<button class="primary" onclick="analyzeHuman()" id="analyzeHumanBtn">حلّل وضعي</button>
+<h2 data-t="daily">🧠 المتابعة اليومية للإنسان</h2>
+<form id="humanForm">
+<div class="field"><label data-t="mood">كيف تصف حالتك اليوم؟</label>
+<select name="mood" required>
+<option value="good" data-t="good">جيد</option>
+<option value="normal" data-t="normal">عادي</option>
+<option value="tired" data-t="tired">متعب</option>
+<option value="stressed" data-t="stressed">متوتر</option>
+<option value="sad" data-t="sad">حزين</option>
+</select></div>
+<div class="grid">
+<div class="field"><label data-t="energy">مستوى الطاقة من 1 إلى 10</label>
+<input name="energy" type="number" min="1" max="10" value="5" required></div>
+<div class="field"><label data-t="stress">مستوى الضغط من 1 إلى 10</label>
+<input name="stress" type="number" min="1" max="10" value="5" required></div>
+</div>
+<div class="field"><label data-t="sleep">ساعات النوم</label>
+<input name="sleep" type="number" min="0" max="24" step=".5" value="8"></div>
+<div class="field"><label data-t="positive">ما الذي سار جيداً؟</label>
+<textarea name="positive"></textarea></div>
+<div class="field"><label data-t="challenge">ما التحدي الأهم الآن؟</label>
+<textarea name="challenge"></textarea></div>
+<div class="field"><label data-t="goalToday">ما الذي تريد تحقيقه؟</label>
+<textarea name="goal"></textarea></div>
+<button type="submit" data-t="save">حفظ المتابعة</button>
+<button type="button" class="secondary" onclick="analyzeHuman()" data-t="analyze">حلّل واقترح خطوات</button>
+</form>
 <div id="humanResult"></div>
 </div>
 </section>
 
-<section id="animal" class="hidden">
+<section id="animals">
 <div class="card">
-<h2 id="animalTitle">🐾 فهم الحيوان</h2>
-<p id="animalDesc">تابع سلوك حيوانك وتغيراته اليومية. هذه الأداة لا تستبدل الطبيب البيطري.</p>
-
-<label id="speciesLabel">نوع الحيوان</label>
-<select id="species">
-<option value="dog">كلب 🐕</option>
-<option value="cat">قطة 🐈</option>
-</select>
-
-<label id="ageLabel">عمر الحيوان</label>
-<input id="animalAge" placeholder="مثلاً: 3 سنوات">
-
-<label id="behaviorLabel">السلوك اليومي</label>
-<select id="behavior">
-<option value="normal">طبيعي</option>
-<option value="quiet">هادئ أكثر من المعتاد</option>
-<option value="aggressive">عدواني أو عصبي</option>
-<option value="fearful">خائف أو متوتر</option>
-<option value="hiding">يختبئ أو ينعزل</option>
-<option value="active">نشاط زائد</option>
-</select>
-
-<label id="appetiteLabel">الشهية</label>
-<select id="appetite">
-<option value="normal">طبيعية</option>
-<option value="less">أقل من المعتاد</option>
-<option value="more">أكثر من المعتاد</option>
-<option value="none">لا يأكل</option>
-</select>
-
-<label id="energyLabel">النشاط</label>
-<select id="energy">
-<option value="normal">طبيعي</option>
-<option value="low">منخفض</option>
-<option value="high">مرتفع</option>
-</select>
-
-<label id="symptomsLabel">علامات غير معتادة</label>
-<textarea id="symptoms" rows="3" placeholder="قيء، ألم، عرج، صعوبة تنفس..."></textarea>
-
-<label id="animalNotesLabel">ملاحظات إضافية</label>
-<textarea id="animalNotes" rows="3"></textarea>
-
-<button class="primary" onclick="analyzeAnimal()" id="analyzeAnimalBtn">حلّل حالة الحيوان</button>
+<h2 data-t="animalTitle">🐾 فهم الحيوان ومتابعته</h2>
+<form id="animalForm">
+<div class="field"><label data-t="animalName">اسم الحيوان</label>
+<input name="name" required></div>
+<div class="grid">
+<div class="field"><label data-t="species">النوع</label>
+<select name="species"><option value="dog" data-t="dog">كلب</option><option value="cat" data-t="cat">قط</option></select></div>
+<div class="field"><label data-t="age">العمر التقريبي</label>
+<input name="age" placeholder="مثلاً: 3 سنوات"></div>
+</div>
+<div class="field"><label data-t="behavior">السلوك اليوم</label>
+<select name="behavior">
+<option value="normal" data-t="normalBehavior">طبيعي</option>
+<option value="quiet" data-t="quiet">هادئ بشكل غير معتاد</option>
+<option value="agitated" data-t="agitated">قلق أو مضطرب</option>
+<option value="aggressive" data-t="aggressive">عدواني</option>
+<option value="withdrawn" data-t="withdrawn">منعزل</option>
+</select></div>
+<div class="grid">
+<div class="field"><label data-t="appetite">الشهية</label>
+<select name="appetite"><option value="normal" data-t="normal">طبيعية</option><option value="low" data-t="low">منخفضة</option><option value="high" data-t="high">مرتفعة</option></select></div>
+<div class="field"><label data-t="activity">النشاط</label>
+<select name="activity"><option value="normal" data-t="normal">طبيعي</option><option value="low" data-t="low">منخفض</option><option value="high" data-t="high">مرتفع</option></select></div>
+</div>
+<div class="field"><label data-t="symptoms">علامات أو أعراض ملحوظة</label>
+<textarea name="symptoms"></textarea></div>
+<div class="field"><label data-t="animalNotes">ملاحظات إضافية</label>
+<textarea name="notes"></textarea></div>
+<button type="submit" data-t="saveAnimal">حفظ متابعة الحيوان</button>
+</form>
 <div id="animalResult"></div>
 </div>
-</section>
-
-<section id="records" class="hidden">
 <div class="card">
-<h2 id="recordsTitle">📚 سجلاتي السابقة</h2>
-<p id="storageInfo">بياناتك محفوظة على هذا الجهاز.</p>
-<div id="recordList"></div>
-<button onclick="exportData()" id="exportBtn">تصدير بياناتي</button>
-<button onclick="clearData()" id="clearBtn">حذف جميع السجلات</button>
+<h3 data-t="animalWarning">تنبيه مهم</h3>
+<p data-t="animalWarningText">هذا النظام لا يشخّص الأمراض ولا يعوّض الطبيب البيطري. عند صعوبة التنفس أو التشنجات أو الانهيار أو الألم الشديد، اطلب رعاية بيطرية عاجلة.</p>
 </div>
 </section>
-</main>
 
-<footer>Future Self ✨ | Understand Today. Build Tomorrow.</footer>
+<section id="planning">
+<div class="card">
+<h2 data-t="planTitle">🗺️ بناء المستقبل</h2>
+<form id="planForm">
+<div class="field"><label data-t="goalName">ما هدفك؟</label>
+<input name="title" required></div>
+<div class="field"><label data-t="category">المجال</label>
+<select name="category">
+<option value="career" data-t="career">العمل والمهنة</option>
+<option value="learning" data-t="learning">التعلم</option>
+<option value="personal" data-t="personal">تطوير الذات</option>
+<option value="family" data-t="family">العائلة</option>
+<option value="financial" data-t="financial">المال</option>
+<option value="other" data-t="other">أخرى</option>
+</select></div>
+<div class="field"><label data-t="deadline">الموعد المستهدف</label>
+<input type="date" name="deadline"></div>
+<div class="field"><label data-t="steps">الخطوة الأولى</label>
+<textarea name="steps"></textarea></div>
+<button type="submit" data-t="saveGoal">حفظ الهدف</button>
+</form>
+</div>
+</section>
+
+<section id="decisions">
+<div class="card">
+<h2 data-t="decisionTitle">⚖️ مختبر القرارات</h2>
+<form id="decisionForm">
+<div class="field"><label data-t="question">ما القرار الذي تفكر فيه؟</label>
+<textarea name="question" required></textarea></div>
+<div class="field"><label data-t="optionA">الخيار الأول</label>
+<textarea name="optionA" required></textarea></div>
+<div class="field"><label data-t="optionB">الخيار الثاني</label>
+<textarea name="optionB" required></textarea></div>
+<div class="field"><label data-t="priority">ما أهم شيء بالنسبة لك؟</label>
+<select name="priority">
+<option value="safety" data-t="safety">الأمان والاستقرار</option>
+<option value="money" data-t="money">المال</option>
+<option value="time" data-t="time">الوقت</option>
+<option value="growth" data-t="growth">التطور المستقبلي</option>
+<option value="family" data-t="family">العائلة</option>
+</select></div>
+<button type="submit" data-t="analyzeDecision">تحليل الخيارات</button>
+</form>
+<div id="decisionResult"></div>
+</div>
+</section>
+
+<section id="records">
+<div class="card">
+<h2 data-t="recordsTitle">📚 ذاكرتك وسجلاتك</h2>
+<p class="muted" data-t="localNotice">السجلات محفوظة محلياً على هذا الجهاز والمتصفح.</p>
+<div id="recordList"></div>
+</div>
+</section>
+
+<section id="settings">
+<div class="card">
+<h2 data-t="settingsTitle">⚙️ إعدادات وخصوصية</h2>
+<p data-t="privacy">بياناتك مخزنة محلياً على جهازك. لا يتم إرسالها إلى خادم بواسطة هذا الإصدار.</p>
+<button onclick="exportData()" data-t="export">تصدير نسخة احتياطية</button>
+<div class="field">
+<label data-t="import">استيراد نسخة احتياطية</label>
+<input type="file" id="importFile" accept=".json,application/json">
+</div>
+<button class="secondary" onclick="importData()" data-t="importButton">استعادة البيانات</button>
+<hr>
+<button class="danger" onclick="clearData()" data-t="delete">حذف جميع البيانات المحلية</button>
+<p class="muted" data-t="deleteWarning">الحذف نهائي ما لم تكن قد صدّرت نسخة احتياطية.</p>
+</div>
+</section>
+
+</main>
+<footer>Future Self © 2026 · Understand Today. Build Tomorrow.</footer>
 
 <script>
-const words={
+const KEY="future_self_v1";
+let db=loadDB();
+let currentLanguage="ar";
+
+function loadDB(){
+ try{
+  const saved=JSON.parse(localStorage.getItem(KEY));
+  if(saved)return {...{humans:[],animals:[],plans:[],decisions:[]},...saved};
+ }catch(e){}
+ return {humans:[],animals:[],plans:[],decisions:[]};
+}
+function saveDB(){
+ try{
+  localStorage.setItem(KEY,JSON.stringify(db));
+  updateDashboard();
+ }catch(e){alert("تعذر الحفظ. قد تكون مساحة التخزين ممتلئة.");}
+}
+function today(){return new Date().toLocaleString();}
+function showTab(id,button){
+ document.querySelectorAll("main section").forEach(s=>s.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+ button.classList.add("active");
+ if(id==="records")renderRecords();
+ if(id==="home")updateDashboard();
+}
+function formData(form){return Object.fromEntries(new FormData(form).entries());}
+
+document.getElementById("humanForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ const data=formData(e.target);
+ data.date=today();data.id=Date.now();
+ db.humans.unshift(data);saveDB();
+ document.getElementById("humanResult").innerHTML='<div class="result">'+T("saved")+'</div>';
+ e.target.reset();
+});
+document.getElementById("animalForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ const data=formData(e.target);
+ data.date=today();data.id=Date.now();
+ db.animals.unshift(data);saveDB();
+ document.getElementById("animalResult").innerHTML='<div class="result">'+T("saved")+'</div>';
+ e.target.reset();
+});
+document.getElementById("planForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ const data=formData(e.target);
+ data.date=today();data.id=Date.now();data.done=false;
+ db.plans.unshift(data);saveDB();
+ alert(T("saved"));e.target.reset();
+});
+document.getElementById("decisionForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ const data=formData(e.target);
+ data.date=today();data.id=Date.now();
+ db.decisions.unshift(data);saveDB();
+ const result=analyzeDecision(data);
+ document.getElementById("decisionResult").innerHTML='<div class="result">'+escapeHTML(result)+'</div>';
+});
+
+function analyzeHuman(){
+ const d=db.humans[0];
+ if(!d){alert(T("noData"));return;}
+ let text=T("humanAnalysis")+"\n";
+ if(Number(d.stress)>=7)text+=T("highStress")+"\n";
+ if(Number(d.energy)<=3)text+=T("lowEnergy")+"\n";
+ if(Number(d.sleep)<6)text+=T("lowSleep")+"\n";
+ if(Number(d.energy)>=7 && Number(d.stress)<=4)text+=T("positiveState")+"\n";
+ text+=T("suggestion")+"\n";
+ text+=T("suggestion1")+"\n"+T("suggestion2")+"\n"+T("suggestion3");
+ document.getElementById("humanResult").innerHTML='<div class="result">'+escapeHTML(text)+'</div>';
+}
+function analyzeDecision(d){
+ return T("decisionAnalysis")+"\n\n"+
+ T("optionA")+": "+d.optionA+"\n"+
+ T("optionB")+": "+d.optionB+"\n\n"+
+ T("priority")+": "+d.priority+"\n\n"+
+ T("decisionAdvice");
+}
+function escapeHTML(s){
+ return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function updateDashboard(){
+ document.getElementById("humanCount").textContent=db.humans.length;
+ document.getElementById("animalCount").textContent=db.animals.length;
+ document.getElementById("planCount").textContent=db.plans.length;
+ document.getElementById("decisionCount").textContent=db.decisions.length;
+}
+function renderRecords(){
+ const list=document.getElementById("recordList");
+ const groups=[
+  ["🧠 "+T("human"),db.humans,"human"],
+  ["🐾 "+T("animals"),db.animals,"animal"],
+  ["🗺️ "+T("planning"),db.plans,"plan"],
+  ["⚖️ "+T("decisions"),db.decisions,"decision"]
+ ];
+ let html="";
+ groups.forEach(([title,items,type])=>{
+  html+="<h3>"+escapeHTML(title)+" ("+items.length+")</h3>";
+  if(!items.length){html+='<p class="muted">'+T("empty")+'</p>';return;}
+  items.forEach(item=>{
+   let summary="";
+   if(type==="human")summary=T("mood")+": "+item.mood+" · "+T("energy")+": "+item.energy+"/10 · "+T("stress")+": "+item.stress+"/10";
+   if(type==="animal")summary=item.name+" · "+item.species+" · "+item.behavior;
+   if(type==="plan")summary=item.title+" · "+item.category+" · "+(item.deadline||"");
+   if(type==="decision")summary=item.question;
+   html+='<div class="item"><small>'+escapeHTML(item.date||"")+'</small><p>'+escapeHTML(summary)+'</p>';
+   if(item.positive)html+='<p>'+escapeHTML(item.positive)+'</p>';
+   if(item.challenge)html+='<p>'+escapeHTML(item.challenge)+'</p>';
+   if(item.symptoms)html+='<p>'+T("symptoms")+': '+escapeHTML(item.symptoms)+'</p>';
+   if(item.steps)html+='<p>'+escapeHTML(item.steps)+'</p>';
+   html+='<button class="danger small" onclick="deleteRecord(\''+type+'\','+item.id+')">'+T("deleteOne")+'</button></div>';
+  });
+ });
+ list.innerHTML=html;
+}
+function deleteRecord(type,id){
+ if(!confirm(T("confirmDelete")))return;
+ const keyMap={human:"humans",animal:"animals",plan:"plans",decision:"decisions"};
+ db[keyMap[type]]=db[keyMap[type]].filter(x=>x.id!==id);
+ saveDB();renderRecords();
+}
+function exportData(){
+ const blob=new Blob([JSON.stringify(db,null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;a.download="future-self-backup.json";a.click();
+ URL.revokeObjectURL(url);
+}
+function importData(){
+ const file=document.getElementById("importFile").files[0];
+ if(!file){alert(T("chooseFile"));return;}
+ const reader=new FileReader();
+ reader.onload=()=>{
+  try{
+   const d=JSON.parse(reader.result);
+   if(!d||!Array.isArray(d.humans)||!Array.isArray(d.animals)||!Array.isArray(d.plans)||!Array.isArray(d.decisions))throw Error();
+   if(!confirm(T("confirmImport")))return;
+   db=d;saveDB();renderRecords();alert(T("imported"));
+  }catch(e){alert(T("invalidFile"));}
+ };
+ reader.readAsText(file);
+}
+function clearData(){
+ if(!confirm(T("confirmDeleteAll")))return;
+ db={humans:[],animals:[],plans:[],decisions:[]};
+ saveDB();renderRecords();
+}
+
+const translations={
 ar:{
-tagline:"افهم نفسك. ابنِ مستقبلك.",home:"الرئيسية",human:"🧠 الإنسان",animal:"🐾 الحيوانات",records:"📚 سجلاتي",
-welcome:"مرحباً بك في Future Self",intro:"منظومة تساعدك على فهم نفسك، ومتابعة حياتك، واكتشاف الأنماط، وبناء مستقبل أفضل.",visionTitle:"رؤيتنا",vision:"لا ندعي معرفة الغيب أو التنبؤ بالمستقبل. نساعدك على فهم الحاضر واتخاذ قرارات أفضل.",startTitle:"ابدأ رحلتك",startHuman:"🧠 افهم نفسك",startAnimal:"🐾 افهم حيوانك",
-humanTitle:"🧠 فهم الإنسان",humanDesc:"أجب عن الأسئلة لمساعدتك على فهم وضعك الحالي.",moodLabel:"كيف تشعر اليوم؟",stressLabel:"مستوى الضغط",workLabel:"العمل والتعلم",sleepLabel:"كيف هو نومك؟",goalLabel:"ما هدفك الرئيسي؟",notesLabel:"اكتب ما تريد فهمه عن حياتك",analyzeHumanBtn:"حلّل وضعي",
-animalTitle:"🐾 فهم الحيوان",animalDesc:"تابع سلوك حيوانك وتغيراته اليومية. هذه الأداة لا تستبدل الطبيب البيطري.",speciesLabel:"نوع الحيوان",ageLabel:"عمر الحيوان",behaviorLabel:"السلوك اليومي",appetiteLabel:"الشهية",energyLabel:"النشاط",symptomsLabel:"علامات غير معتادة",animalNotesLabel:"ملاحظات إضافية",analyzeAnimalBtn:"حلّل حالة الحيوان",
-recordsTitle:"📚 سجلاتي السابقة",storageInfo:"بياناتك محفوظة على هذا الجهاز.",exportBtn:"تصدير بياناتي",clearBtn:"حذف جميع السجلات",analysis:"القراءة الأولية",advice:"خطوات مقترحة",save:"حفظ في سجلاتي",saved:"تم الحفظ",empty:"لا توجد سجلات حتى الآن.",confirm:"هل تريد حذف جميع السجلات؟",
-good:"جيد ومستقر",normal:"عادي",stressed:"قلق أو متوتر",sad:"حزين",tired:"متعب",low:"منخفض",medium:"متوسط",high:"مرتفع",stable:"مستقر",learning:"أتطور وأتعلم",searching:"أبحث عن فرصة",difficult:"أواجه صعوبات",average:"متوسط",bad:"سيئ",dog:"كلب",cat:"قطة",quiet:"هادئ",aggressive:"عدواني",fearful:"خائف",hiding:"يختبئ",active:"نشاط زائد",less:"أقل من المعتاد",more:"أكثر من المعتاد",none:"لا يأكل",humanRecord:"الإنسان",animalRecord:"الحيوان",urgent:"تنبيه: صعوبة التنفس أو الانهيار أو التشنج أو الألم الشديد تستدعي التواصل العاجل مع طبيب بيطري."
-},
-es:{
-tagline:"Compréndete. Construye tu futuro.",home:"Inicio",human:"🧠 Persona",animal:"🐾 Animales",records:"📚 Registros",welcome:"Bienvenido a Future Self",intro:"Una herramienta para comprenderte y construir un futuro mejor.",visionTitle:"Nuestra visión",vision:"No predecimos el futuro. Te ayudamos a comprender el presente.",startTitle:"Comienza",startHuman:"🧠 Compréndete",startAnimal:"🐾 Comprende tu animal",humanTitle:"🧠 Comprensión personal",humanDesc:"Responde las preguntas.",moodLabel:"¿Cómo te sientes hoy?",stressLabel:"Nivel de estrés",workLabel:"Trabajo y aprendizaje",sleepLabel:"¿Cómo duermes?",goalLabel:"¿Cuál es tu objetivo?",notesLabel:"Cuéntanos más",analyzeHumanBtn:"Analizar mi situación",animalTitle:"🐾 Comprensión animal",animalDesc:"Registra el comportamiento diario. No sustituye al veterinario.",speciesLabel:"Animal",ageLabel:"Edad",behaviorLabel:"Comportamiento",appetiteLabel:"Apetito",energyLabel:"Actividad",symptomsLabel:"Síntomas",animalNotesLabel:"Notas",analyzeAnimalBtn:"Analizar animal",recordsTitle:"📚 Mis registros",storageInfo:"Datos guardados en este dispositivo.",exportBtn:"Exportar datos",clearBtn:"Eliminar registros",analysis:"Lectura inicial",advice:"Pasos sugeridos",save:"Guardar",saved:"Guardado",empty:"Todavía no hay registros.",confirm:"¿Eliminar todos los registros?"
-},
-fr:{
-tagline:"Comprends-toi. Construis ton avenir.",home:"Accueil",human:"🧠 Humain",animal:"🐾 Animaux",records:"📚 Historique",welcome:"Bienvenue sur Future Self",intro:"Un outil pour mieux te comprendre et construire ton avenir.",visionTitle:"Notre vision",vision:"Nous ne prédisons pas l'avenir. Nous aidons à comprendre le présent.",startTitle:"Commence",startHuman:"🧠 Me comprendre",startAnimal:"🐾 Comprendre ton animal",humanTitle:"🧠 Compréhension personnelle",humanDesc:"Réponds aux questions.",moodLabel:"Comment te sens-tu ?",stressLabel:"Niveau de stress",workLabel:"Travail et apprentissage",sleepLabel:"Comment dors-tu ?",goalLabel:"Ton objectif",notesLabel:"Parle-nous de ta situation",analyzeHumanBtn:"Analyser ma situation",animalTitle:"🐾 Compréhension animale",animalDesc:"Suis le comportement. Ne remplace pas un vétérinaire.",speciesLabel:"Animal",ageLabel:"Âge",behaviorLabel:"Comportement",appetiteLabel:"Appétit",energyLabel:"Activité",symptomsLabel:"Symptômes",animalNotesLabel:"Notes",analyzeAnimalBtn:"Analyser l'animal",recordsTitle:"📚 Mes historiques",storageInfo:"Données sur cet appareil.",exportBtn:"Exporter",clearBtn:"Supprimer",analysis:"Première analyse",advice:"Conseils",save:"Enregistrer",saved:"Enregistré",empty:"Aucun historique.",confirm:"Supprimer tous les historiques ?"
+slogan:"افهم اليوم. ابنِ الغد.",home:"⌂ الرئيسية",human:"🧠 الإنسان",animals:"🐾 الحيوانات",planning:"🗺️ التخطيط",decisions:"⚖️ القرارات",records:"📚 السجلات",settings:"⚙️ الإعدادات",
+welcome:"مرحباً بك في Future Self",intro:"مساحة لفهم الحاضر وبناء المستقبل، خطوة بخطوة.",recordsCount:"سجلات",goals:"أهداف",principle:"فلسفة Future Self",principleText:"لا يمكن بناء مستقبل أفضل دون فهم ما يحدث اليوم. كل متابعة صغيرة يمكن أن تساعدك على رؤية الصورة الأكبر.",
+daily:"🧠 المتابعة اليومية للإنسان",mood:"كيف تصف حالتك اليوم؟",good:"جيد",normal:"عادي",tired:"متعب",stressed:"متوتر",sad:"حزين",energy:"مستوى الطاقة من 1 إلى 10",stress:"مستوى الضغط من 1 إلى 10",sleep:"ساعات النوم",positive:"ما الذي سار جيداً؟",challenge:"ما التحدي الأهم الآن؟",goalToday:"ما الذي تريد تحقيقه؟",save:"حفظ المتابعة",analyze:"حلّل واقترح خطوات",
+animalTitle:"🐾 فهم الحيوان ومتابعته",animalName:"اسم الحيوان",species:"النوع",dog:"كلب",cat:"قط",age:"العمر التقريبي",behavior:"السلوك اليوم",normalBehavior:"طبيعي",quiet:"هادئ بشكل غير معتاد",agitated:"قلق أو مضطرب",aggressive:"عدواني",withdrawn:"منعزل",appetite:"الشهية",activity:"النشاط",low:"منخفض",high:"مرتفع",symptoms:"علامات أو أعراض ملحوظة",animalNotes:"ملاحظات إضافية",saveAnimal:"حفظ متابعة الحيوان",animalWarning:"تنبيه مهم",animalWarningText:"هذا النظام لا يشخّص الأمراض ولا يعوّض الطبيب البيطري. عند صعوبة التنفس أو التشنجات أو الانهيار أو الألم الشديد، اطلب رعاية بيطرية عاجلة.",
+planTitle:"🗺️ بناء المستقبل",goalName:"ما هدفك؟",category:"المجال",career:"العمل والمهنة",learning:"التعلم",personal:"تطوير الذات",family:"العائلة",financial:"المال",other:"أخرى",deadline:"الموعد المستهدف",steps:"الخطوة الأولى",saveGoal:"حفظ الهدف",
+decisionTitle:"⚖️ مختبر القرارات",question:"ما القرار الذي تفكر فيه؟",optionA:"الخيار الأول",optionB:"الخيار الثاني",priority:"ما أهم شيء بالنسبة لك؟",safety:"الأمان والاستقرار",money:"المال",time:"الوقت",growth:"التطور المستقبلي",analyzeDecision:"تحليل الخيارات",
+recordsTitle:"📚 ذاكرتك وسجلاتك",localNotice:"السجلات محفوظة محلياً على هذا الجهاز والمتصفح.",settingsTitle:"⚙️ إعدادات وخصوصية",privacy:"بياناتك مخزنة محلياً على جهازك. لا يتم إرسالها إلى خادم بواسطة هذا الإصدار.",export:"تصدير نسخة احتياطية",import:"استيراد نسخة احتياطية",importButton:"استعادة البيانات",delete:"حذف جميع البيانات المحلية",deleteWarning:"الحذف نهائي ما لم تكن قد صدّرت نسخة احتياطية.",
+saved:"تم الحفظ بنجاح.",noData:"لا توجد متابعة لتحليلها بعد.",humanAnalysis:"تحليل محلي أولي للمتابعة الأخيرة:",highStress:"مستوى الضغط مرتفع. حاول تحديد مصدر ضغط واحد يمكن التعامل معه.",lowEnergy:"الطاقة منخفضة. خفف المهام وامنح نفسك وقتاً للراحة.",lowSleep:"النوم أقل من ست ساعات. حاول تحسين روتين النوم.",positiveState:"تظهر مؤشرات إيجابية في الطاقة والضغط.",suggestion:"اقتراحات عملية:",suggestion1:"1. اختر مهمة صغيرة واحدة اليوم.",suggestion2:"2. خصص وقتاً للراحة والحركة.",suggestion3:"3. راقب التغير خلال الأيام القادمة.",decisionAnalysis:"تحليل منظم للقرار:",decisionAdvice:"قارن الخيارين حسب الأولوية التي اخترتها، والتكلفة والمخاطر والنتائج بعد ستة أشهر. لا توجد إجابة تلقائية؛ القرار النهائي لك.",
+empty:"لا توجد سجلات بعد.",deleteOne:"حذف السجل",confirmDelete:"هل تريد حذف هذا السجل؟",chooseFile:"اختر ملف النسخة الاحتياطية أولاً.",confirmImport:"سيتم استبدال البيانات الحالية. هل تريد المتابعة؟",imported:"تم استيراد البيانات.",invalidFile:"ملف غير صالح.",confirmDeleteAll:"هل أنت متأكد من حذف جميع البيانات؟"
 },
 en:{
-tagline:"Understand yourself. Build your future.",home:"Home",human:"🧠 Human",animal:"🐾 Animals",records:"📚 Records",welcome:"Welcome to Future Self",intro:"A tool to understand yourself and build a better future.",visionTitle:"Our vision",vision:"We do not predict the future. We help you understand the present.",startTitle:"Start your journey",startHuman:"🧠 Understand yourself",startAnimal:"🐾 Understand your animal",humanTitle:"🧠 Human understanding",humanDesc:"Answer the questions.",moodLabel:"How do you feel today?",stressLabel:"Stress level",workLabel:"Work and learning",sleepLabel:"How is your sleep?",goalLabel:"Your main goal",notesLabel:"Tell us more",analyzeHumanBtn:"Analyze my situation",animalTitle:"🐾 Animal understanding",animalDesc:"Track daily behavior. This does not replace a veterinarian.",speciesLabel:"Animal",ageLabel:"Age",behaviorLabel:"Daily behavior",appetiteLabel:"Appetite",energyLabel:"Activity",symptomsLabel:"Unusual signs",animalNotesLabel:"Additional notes",analyzeAnimalBtn:"Analyze animal",recordsTitle:"📚 My records",storageInfo:"Data stored on this device.",exportBtn:"Export data",clearBtn:"Delete all records",analysis:"Initial reading",advice:"Suggested steps",save:"Save record",saved:"Saved",empty:"No records yet.",confirm:"Delete all records?"
+slogan:"Understand Today. Build Tomorrow.",home:"⌂ Home",human:"🧠 Human",animals:"🐾 Animals",planning:"🗺️ Planning",decisions:"⚖️ Decisions",records:"📚 Records",settings:"⚙️ Settings",
+welcome:"Welcome to Future Self",intro:"A space to understand the present and build the future, step by step.",recordsCount:"records",goals:"goals",principle:"The Future Self philosophy",principleText:"A better future begins with understanding what is happening today.",
+daily:"🧠 Daily human check-in",mood:"How are you feeling today?",good:"Good",normal:"Normal",tired:"Tired",stressed:"Stressed",sad:"Sad",energy:"Energy level (1–10)",stress:"Stress level (1–10)",sleep:"Hours of sleep",positive:"What went well?",challenge:"What is your main challenge?",goalToday:"What do you want to achieve?",save:"Save check-in",analyze:"Analyze and suggest steps",
+animalTitle:"🐾 Animal understanding and tracking",animalName:"Animal name",species:"Species",dog:"Dog",cat:"Cat",age:"Approximate age",behavior:"Behavior today",normalBehavior:"Normal",quiet:"Unusually quiet",agitated:"Anxious or restless",aggressive:"Aggressive",withdrawn:"Withdrawn",appetite:"Appetite",activity:"Activity",low:"Low",high:"High",symptoms:"Visible signs or symptoms",animalNotes:"Additional notes",saveAnimal:"Save animal check-in",animalWarning:"Important notice",animalWarningText:"This system does not diagnose illness or replace a veterinarian. Seek urgent veterinary care for breathing difficulty, seizures, collapse, or severe pain.",
+planTitle:"🗺️ Build your future",goalName:"Your goal",category:"Area",career:"Career",learning:"Learning",personal:"Personal growth",family:"Family",financial:"Finance",other:"Other",deadline:"Target date",steps:"First step",saveGoal:"Save goal",
+decisionTitle:"⚖️ Decision lab",question:"What decision are you considering?",optionA:"Option one",optionB:"Option two",priority:"What matters most?",safety:"Safety and stability",money:"Money",time:"Time",growth:"Future growth",analyzeDecision:"Analyze options",
+recordsTitle:"📚 Your memory and records",localNotice:"Records are stored locally on this device and browser.",settingsTitle:"⚙️ Settings and privacy",privacy:"Your data is stored locally. This version does not send it to a server.",export:"Export backup",import:"Import backup",importButton:"Restore data",delete:"Delete all local data",deleteWarning:"Deletion is permanent unless you have exported a backup.",
+saved:"Saved successfully.",noData:"There is no check-in to analyze yet.",humanAnalysis:"Initial local analysis of your latest check-in:",highStress:"Stress is high. Identify one manageable source of pressure.",lowEnergy:"Energy is low. Reduce tasks and allow time to rest.",lowSleep:"Sleep is under six hours. Consider improving your sleep routine.",positiveState:"Energy and stress indicators look positive.",suggestion:"Practical suggestions:",suggestion1:"1. Choose one small task today.",suggestion2:"2. Make time for rest and movement.",suggestion3:"3. Track changes over the coming days.",decisionAnalysis:"Structured decision review:",decisionAdvice:"Compare both options by your chosen priority, costs, risks, and outcomes six months from now. The final decision is yours.",
+empty:"No records yet.",deleteOne:"Delete record",confirmDelete:"Delete this record?",chooseFile:"Choose a backup file first.",confirmImport:"Current data will be replaced. Continue?",imported:"Data imported.",invalidFile:"Invalid file.",confirmDeleteAll:"Are you sure you want to delete all data?"
 }
 };
 
-let language="ar";
-let records=JSON.parse(localStorage.getItem("FS_records")||"[]");
+translations.es={
+...translations.en,
+slogan:"Comprende hoy. Construye mañana.",home:"⌂ Inicio",human:"🧠 Persona",animals:"🐾 Animales",planning:"🗺️ Planificación",decisions:"⚖️ Decisiones",records:"📚 Registros",settings:"⚙️ Ajustes",
+welcome:"Bienvenido a Future Self",intro:"Un espacio para comprender el presente y construir el futuro.",daily:"🧠 Seguimiento diario",mood:"¿Cómo te sientes hoy?",good:"Bien",normal:"Normal",tired:"Cansado",stressed:"Estresado",sad:"Triste",energy:"Nivel de energía (1–10)",stress:"Nivel de estrés (1–10)",sleep:"Horas de sueño",positive:"¿Qué salió bien?",challenge:"¿Cuál es tu principal desafío?",goalToday:"¿Qué quieres lograr?",save:"Guardar seguimiento",analyze:"Analizar y sugerir pasos",
+animalTitle:"🐾 Seguimiento animal",animalName:"Nombre del animal",species:"Especie",dog:"Perro",cat:"Gato",age:"Edad aproximada",behavior:"Comportamiento de hoy",quiet:"Inusualmente tranquilo",agitated:"Ansioso o inquieto",aggressive:"Agresivo",withdrawn:"Aislado",appetite:"Apetito",activity:"Actividad",symptoms:"Signos o síntomas",animalNotes:"Notas adicionales",saveAnimal:"Guardar seguimiento",animalWarning:"Aviso importante",animalWarningText:"Este sistema no diagnostica enfermedades ni sustituye al veterinario. Busca atención urgente ante dificultad respiratoria, convulsiones, colapso o dolor intenso.",
+planTitle:"🗺️ Construye tu futuro",goalName:"¿Cuál es tu objetivo?",category:"Área",career:"Trabajo y carrera",learning:"Aprendizaje",personal:"Desarrollo personal",family:"Familia",financial:"Finanzas",other:"Otro",deadline:"Fecha objetivo",steps:"Primer paso",saveGoal:"Guardar objetivo",
+decisionTitle:"⚖️ Laboratorio de decisiones",question:"¿Qué decisión estás considerando?",optionA:"Opción uno",optionB:"Opción dos",priority:"¿Qué es lo más importante?",safety:"Seguridad y estabilidad",money:"Dinero",time:"Tiempo",growth:"Crecimiento futuro",analyzeDecision:"Analizar opciones",
+recordsTitle:"📚 Tu memoria y registros",localNotice:"Los registros se guardan localmente en este dispositivo.",settingsTitle:"⚙️ Ajustes y privacidad",privacy:"Tus datos se almacenan localmente. Esta versión no los envía a un servidor.",export:"Exportar copia de seguridad",import:"Importar copia de seguridad",importButton:"Restaurar datos",delete:"Eliminar todos los datos",deleteWarning:"La eliminación es permanente si no tienes una copia de seguridad.",
+saved:"Guardado correctamente.",noData:"Todavía no hay seguimiento para analizar.",humanAnalysis:"Análisis local inicial:",highStress:"El estrés es alto. Identifica una fuente de presión manejable.",lowEnergy:"La energía es baja. Reduce tareas y descansa.",lowSleep:"Dormiste menos de seis horas. Mejora tu rutina de sueño.",positiveState:"Los indicadores de energía y estrés son positivos.",suggestion:"Sugerencias prácticas:",suggestion1:"1. Elige una tarea pequeña hoy.",suggestion2:"2. Reserva tiempo para descansar y moverte.",suggestion3:"3. Observa los cambios en los próximos días.",decisionAnalysis:"Análisis estructurado:",decisionAdvice:"Compara las opciones según tu prioridad, costes, riesgos y resultados dentro de seis meses. La decisión final es tuya.",
+empty:"Todavía no hay registros.",deleteOne:"Eliminar registro",confirmDelete:"¿Eliminar este registro?",chooseFile:"Selecciona primero un archivo.",confirmImport:"Los datos actuales serán reemplazados. ¿Continuar?",imported:"Datos importados.",invalidFile:"Archivo no válido.",confirmDeleteAll:"¿Seguro que quieres eliminar todos los datos?"
+};
 
-function t(k){return words[language][k]||words.ar[k]||k;}
+translations.fr={
+...translations.en,
+slogan:"Comprendre aujourd'hui. Construire demain.",home:"⌂ Accueil",human:"🧠 Humain",animals:"🐾 Animaux",planning:"🗺️ Projets",decisions:"⚖️ Décisions",records:"📚 Archives",settings:"⚙️ Réglages",
+welcome:"Bienvenue sur Future Self",intro:"Un espace pour comprendre le présent et construire l'avenir.",daily:"🧠 Suivi quotidien",mood:"Comment vous sentez-vous aujourd'hui ?",good:"Bien",normal:"Normal",tired:"Fatigué",stressed:"Stressé",sad:"Triste",energy:"Énergie (1–10)",stress:"Stress (1–10)",sleep:"Heures de sommeil",positive:"Qu'est-ce qui s'est bien passé ?",challenge:"Quel est votre principal défi ?",goalToday:"Que souhaitez-vous accomplir ?",save:"Enregistrer",analyze:"Analyser et proposer des étapes",
+animalTitle:"🐾 Suivi des animaux",animalName:"Nom de l'animal",species:"Espèce",dog:"Chien",cat:"Chat",age:"Âge approximatif",behavior:"Comportement aujourd'hui",quiet:"Anormalement calme",agitated:"Anxieux ou agité",aggressive:"Agressif",withdrawn:"Isolé",appetite:"Appétit",activity:"Activité",symptoms:"Signes ou symptômes",animalNotes:"Notes supplémentaires",saveAnimal:"Enregistrer le suivi",animalWarning:"Avertissement important",animalWarningText:"Ce système ne diagnostique pas les maladies et ne remplace pas un vétérinaire. Consultez en urgence en cas de difficulté respiratoire, convulsions, effondrement ou douleur intense.",
+planTitle:"🗺️ Construire l'avenir",goalName:"Quel est votre objectif ?",category:"Domaine",career:"Travail et carrière",learning:"Apprentissage",personal:"Développement personnel",family:"Famille",financial:"Finances",other:"Autre",deadline:"Date cible",steps:"Première étape",saveGoal:"Enregistrer l'objectif",
+decisionTitle:"⚖️ Laboratoire de décisions",question:"Quelle décision envisagez-vous ?",optionA:"Option un",optionB:"Option deux",priority:"Quelle est votre priorité ?",safety:"Sécurité et stabilité",money:"Argent",time:"Temps",growth:"Évolution future",analyzeDecision:"Analyser les options",
+recordsTitle:"📚 Votre mémoire et vos archives",localNotice:"Les données sont stockées localement sur cet appareil.",settingsTitle:"⚙️ Réglages et confidentialité",privacy:"Vos données sont stockées localement. Cette version ne les envoie pas à un serveur.",export:"Exporter une sauvegarde",import:"Importer une sauvegarde",importButton:"Restaurer les données",delete:"Supprimer toutes les données",deleteWarning:"La suppression est définitive sans sauvegarde.",
+saved:"Enregistré avec succès.",noData:"Aucun suivi à analyser.",humanAnalysis:"Analyse locale initiale :",highStress:"Le stress est élevé. Identifiez une source de pression gérable.",lowEnergy:"L'énergie est faible. Réduisez les tâches et reposez-vous.",lowSleep:"Moins de six heures de sommeil. Améliorez votre routine.",positiveState:"Les indicateurs d'énergie et de stress sont positifs.",suggestion:"Suggestions pratiques :",suggestion1:"1. Choisissez une petite tâche aujourd'hui.",suggestion2:"2. Prévoyez du repos et du mouvement.",suggestion3:"3. Observez les changements dans les prochains jours.",decisionAnalysis:"Analyse structurée :",decisionAdvice:"Comparez les options selon votre priorité, les coûts, les risques et les résultats dans six mois. La décision finale vous appartient.",
+empty:"Aucun enregistrement.",deleteOne:"Supprimer",confirmDelete:"Supprimer cet enregistrement ?",chooseFile:"Choisissez d'abord une sauvegarde.",confirmImport:"Les données actuelles seront remplacées. Continuer ?",imported:"Données importées.",invalidFile:"Fichier invalide.",confirmDeleteAll:"Supprimer toutes les données ?"
+};
 
-function setLang(l){
-language=l;
-document.documentElement.lang=l;
-document.documentElement.dir=l==="ar"?"rtl":"ltr";
-document.querySelectorAll("[id]").forEach(e=>{
-if(words[l][e.id])e.textContent=words[l][e.id];
-});
-render();
+function T(key){return (translations[currentLanguage]||translations.en)[key]||translations.en[key]||key;}
+function setLanguage(lang){
+ currentLanguage=lang;
+ document.documentElement.lang=lang;
+ document.documentElement.dir=lang==="ar"?"rtl":"ltr";
+ document.querySelectorAll("[data-t]").forEach(el=>{
+  const key=el.dataset.t;
+  if(T(key))el.textContent=T(key);
+ });
+ document.getElementById("engine").textContent=
+ lang==="ar"?"المحرك المحلي نشط":lang==="es"?"Motor local activo":lang==="fr"?"Moteur local actif":"Local engine active";
+ renderRecords();
 }
-
-function tab(id){
-["home","human","animal","records"].forEach(x=>{
-document.getElementById(x).classList.toggle("hidden",x!==id);
-document.getElementById("n"+x[0].toUpperCase()+x.slice(1)).classList.toggle("active",x===id);
-});
-if(id==="records")render();
-}
-
-function analyzeHuman(){
-let mood=document.getElementById("mood").value;
-let stress=document.getElementById("stress").value;
-let work=document.getElementById("work").value;
-let sleep=document.getElementById("sleep").value;
-let goal=document.getElementById("goal").value;
-let notes=document.getElementById("humanNotes").value;
-let findings=[],steps=[];
-
-if(mood==="stressed"||mood==="sad")findings.push("مشاعرك تستحق الاهتمام والرعاية.");
-if(mood==="tired")findings.push("قد تحتاج إلى الراحة وتنظيم يومك.");
-if(stress==="high")findings.push("مستوى الضغط مرتفع حسب إجابتك.");
-if(work==="searching")findings.push("أنت في مرحلة البحث عن فرصة.");
-if(work==="difficult")findings.push("تواجه تحديات في العمل أو التعلم.");
-if(sleep==="bad")findings.push("النوم غير الجيد قد يؤثر في التركيز والمزاج.");
-if(!findings.length)findings.push("وضعك يبدو مستقراً نسبياً حسب إجاباتك.");
-
-steps.push("خصص وقتاً يومياً للراحة ومراجعة أهدافك.");
-if(stress==="high")steps.push("قسّم مسؤولياتك إلى خطوات صغيرة.");
-if(sleep==="bad")steps.push("حاول تنظيم وقت النوم.");
-if(work==="searching"||work==="difficult")steps.push("ضع خطة أسبوعية لتطوير مهاراتك.");
-if(goal)steps.push("هدفك المسجل: "+goal);
-
-showResult("humanResult",{type:"human",date:new Date().toLocaleString(),findings,steps,goal,notes});
-}
-
-function analyzeAnimal(){
-let species=document.getElementById("species").value;
-let age=document.getElementById("animalAge").value;
-let behavior=document.getElementById("behavior").value;
-let appetite=document.getElementById("appetite").value;
-let energy=document.getElementById("energy").value;
-let symptoms=document.getElementById("symptoms").value;
-let notes=document.getElementById("animalNotes").value;
-let findings=[],steps=[];
-
-if(behavior!=="normal")findings.push("هناك تغير في السلوك مقارنة بالمعتاد.");
-if(appetite!=="normal")findings.push("تغير الشهية يحتاج إلى متابعة.");
-if(energy!=="normal")findings.push("مستوى النشاط مختلف عن المعتاد.");
-if(symptoms.trim())findings.push("تم تسجيل علامات تحتاج إلى تقييم.");
-if(!findings.length)findings.push("لم تسجل تغيرات واضحة في السلوك.");
-
-steps.push("راقب السلوك والشهية وشرب الماء.");
-steps.push("سجل متى بدأ التغير وهل يتكرر.");
-steps.push("استشر طبيباً بيطرياً إذا استمر التغير أو ظهرت أعراض.");
-
-let urgent=/تنفس|اختناق|نزيف|انهيار|تشنج|تسمم|ألم شديد|لا يستطيع التبول|breathing|blood|collapse|seizure|poison/i.test(symptoms);
-if(urgent)steps.unshift("تنبيه عاجل: تواصل مع طبيب بيطري فوراً.");
-
-showResult("animalResult",{type:"animal",date:new Date().toLocaleString(),findings,steps,species,age,behavior,appetite,energy,symptoms,notes});
-}
-
-function safe(s){
-return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-}
-
-function showResult(id,data){
-let html='<div class="result"><h3>'+t("analysis")+'</h3>';
-data.findings.forEach(x=>html+='<p>• '+safe(x)+'</p>');
-html+='<h3>'+t("advice")+'</h3>';
-data.steps.forEach(x=>html+='<p>✓ '+safe(x)+'</p>');
-html+='<button class="primary" id="saveResult">'+t("save")+'</button></div>';
-document.getElementById(id).innerHTML=html;
-document.getElementById("saveResult").onclick=()=>saveRecord(data);
-}
-
-function saveRecord(data){
-records.unshift(data);
-localStorage.setItem("FS_records",JSON.stringify(records));
-alert(t("saved"));
-render();
-}
-
-function render(){
-let el=document.getElementById("recordList");
-if(!el)return;
-if(!records.length){el.textContent=t("empty");return;}
-el.innerHTML=records.map((r,i)=>`
-<div class="item">
-<strong>${r.type==="human"?t("humanRecord"):t("animalRecord")}</strong>
-<div class="small">${safe(r.date)}</div>
-<p>${r.findings.map(safe).join(" • ")}</p>
-<button onclick="deleteRecord(${i})">حذف</button>
-</div>`).join("");
-}
-
-function deleteRecord(i){
-records.splice(i,1);
-localStorage.setItem("FS_records",JSON.stringify(records));
-render();
-}
-
-function clearData(){
-if(confirm(t("confirm"))){
-records=[];
-localStorage.removeItem("FS_records");
-render();
-}
-}
-
-function exportData(){
-let blob=new Blob([JSON.stringify(records,null,2)],{type:"application/json"});
-let url=URL.createObjectURL(blob);
-let a=document.createElement("a");
-a.href=url;a.download="future-self-records.json";a.click();
-URL.revokeObjectURL(url);
-}
-
-setLang("ar");
-render();
+updateDashboard();
 </script>
 </body>
 </html>
+
