@@ -1,33 +1,39 @@
-index.html
+index.htm
+
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#101827">
 <title>Future Self</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#101827;color:#f3f5fa;font-family:Arial,sans-serif}
-header{text-align:center;padding:25px;background:#17243a}
-h1,h2{color:#69e0c0}
-nav{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:14px}
-button,select{background:#263750;color:white;border:1px solid #49617c;padding:11px;border-radius:10px;cursor:pointer}
-button.active,.action{background:#087f70}
-main{max-width:750px;margin:auto;padding:14px}
-.card{background:#1b2940;padding:18px;border-radius:16px;margin:14px 0}
-input,textarea{width:100%;padding:13px;margin:8px 0;background:#101827;color:white;border:1px solid #49617c;border-radius:9px}
-textarea{min-height:85px}
-.action{width:100%;margin-top:10px}
-.result{white-space:pre-wrap;line-height:1.8;color:#bcebdc}
-.small{font-size:13px;color:#aab8ca;line-height:1.7}
-.premium{border:1px solid #9276d8}
-.lock{color:#c8aaff}
-footer{text-align:center;color:#91a0b4;padding:25px}
-[hidden]{display:none!important}
+body{margin:0;background:#101827;color:#f1f5f9;font-family:Arial,sans-serif;line-height:1.7}
+header{padding:22px 15px;text-align:center;background:#17243a}
+header h1{margin:0;color:#7dd3fc}
+header p{margin:5px 0}
+nav{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;padding:12px;background:#1e293b}
+button,select{padding:11px 13px;border:0;border-radius:9px;background:#2563eb;color:white;font-size:14px;cursor:pointer}
+button:hover{opacity:.9}
+nav button{background:#334155}
+main{max-width:700px;margin:auto;padding:15px}
+section{display:none;background:#1e293b;padding:18px;border-radius:14px;margin:12px 0}
+section.active{display:block}
+h2{color:#7dd3fc}
+label{display:block;margin-top:13px}
+input,textarea,select{width:100%;padding:12px;margin-top:6px;border:1px solid #475569;border-radius:8px;background:#0f172a;color:white;font-size:16px}
+textarea{min-height:75px;resize:vertical}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}
+.result{white-space:pre-wrap;background:#0f172a;padding:14px;border-radius:10px;margin-top:15px;overflow-wrap:anywhere}
+.record{background:#0f172a;padding:13px;border-radius:9px;margin:10px 0;overflow-wrap:anywhere}
+.small{color:#cbd5e1;font-size:13px}
+footer{text-align:center;padding:25px;color:#94a3b8}
+a{color:#7dd3fc}
 </style>
 </head>
 <body>
+
 <header>
 <h1>Future Self ✨</h1>
 <p id="tagline">افهم نفسك. ابنِ مستقبلك.</p>
@@ -40,315 +46,445 @@ footer{text-align:center;color:#91a0b4;padding:25px}
 </header>
 
 <nav>
-<button id="humanBtn" class="active" onclick="showSection('human')">🧠 الإنسان</button>
-<button id="animalBtn" onclick="showSection('animal')">🐾 الحيوانات</button>
-<button id="historyBtn" onclick="showSection('history')">📚 سجلاتي</button>
-<button id="plansBtn" onclick="showSection('plans')">⭐ Premium</button>
+<button onclick="showSection('human')" id="navHuman">🧠 الإنسان</button>
+<button onclick="showSection('animal')" id="navAnimal">🐾 الحيوانات</button>
+<button onclick="showSection('history')" id="navHistory">📚 سجلاتي</button>
+<button onclick="showSection('premium')" id="navPremium">⭐ Premium</button>
 </nav>
 
 <main>
-<section id="human">
-<div class="card">
+
+<section id="human" class="active">
 <h2 id="humanTitle">اكتشف نفسك</h2>
-<p id="humanDesc">ابدأ بفهم وضعك الحالي وأهدافك.</p>
+<p id="humanIntro">ابدأ بفهم وضعك الحالي وأهدافك.</p>
+
 <label id="moodLabel">كيف تشعر اليوم؟</label>
-<input id="mood" placeholder="اكتب شعورك...">
+<textarea id="mood" placeholder="اكتب شعورك..."></textarea>
+
 <label id="goalLabel">ما هدفك في الحياة؟</label>
 <textarea id="goal"></textarea>
+
 <label id="challengeLabel">ما أكبر تحدٍ تواجهه؟</label>
 <textarea id="challenge"></textarea>
-<button class="action" onclick="saveHuman()" id="humanSave">احفظ سجلك</button>
-<button onclick="analyzeHuman()" id="analyzeHuman">🧠 حلّل وضعي</button>
-<div id="humanResult" class="result"></div>
+
+<div class="actions">
+<button onclick="saveHuman()" id="saveHumanBtn">احفظ سجلك</button>
+<button onclick="analyzeHuman()" id="analyzeHumanBtn">🧠 حلّل وضعي</button>
 </div>
+<div id="humanResult" class="result" hidden></div>
 </section>
 
-<section id="animal" hidden>
-<div class="card">
-<h2 id="animalTitle">افهم حيوانك</h2>
-<p id="animalDesc">تابع سلوك حيوانك وتغيراته اليومية.</p>
-<label id="typeLabel">نوع الحيوان</label>
+<section id="animal">
+<h2 id="animalTitle">فهم حيوانك الأليف 🐾</h2>
+<p id="animalIntro">سجّل ملاحظاتك لمتابعة سلوك حيوانك.</p>
+
+<label id="animalTypeLabel">نوع الحيوان</label>
 <select id="animalType">
-<option value="dog">🐕 كلب</option>
-<option value="cat">🐈 قطة</option>
+<option value="dog">🐶 كلب</option>
+<option value="cat">🐱 قط</option>
 </select>
-<label id="ageLabel">العمر</label>
-<input id="animalAge" placeholder="العمر">
-<label id="behaviorLabel">السلوك اليوم</label>
+
+<label id="animalNameLabel">اسم الحيوان</label>
+<input id="animalName">
+
+<label id="animalAgeLabel">العمر</label>
+<input id="animalAge" placeholder="مثلاً: 3 سنوات">
+
+<label id="behaviorLabel">السلوك الذي لاحظته</label>
 <textarea id="behavior"></textarea>
-<label id="healthLabel">الصحة والنشاط</label>
+
+<label id="healthLabel">ملاحظات عن حالته وراحته</label>
 <textarea id="health"></textarea>
-<button class="action" onclick="saveAnimal()" id="animalSave">احفظ المتابعة</button>
-<button onclick="analyzeAnimal()" id="analyzeAnimal">🐾 حلّل سلوك الحيوان</button>
-<div id="animalResult" class="result"></div>
+
+<div class="actions">
+<button onclick="saveAnimal()" id="saveAnimalBtn">احفظ الملاحظة</button>
+<button onclick="analyzeAnimal()" id="analyzeAnimalBtn">حلّل الملاحظة</button>
 </div>
+<div id="animalResult" class="result" hidden></div>
 </section>
 
-<section id="history" hidden>
-<div class="card">
-<h2 id="historyTitle">سجلاتك السابقة</h2>
-<div id="records"></div>
+<section id="history">
+<h2 id="historyTitle">📚 سجلاتك السابقة</h2>
+<p id="historyIntro">بياناتك محفوظة على هذا الجهاز.</p>
+<div id="recordsList"></div>
+<div class="actions">
 <button onclick="exportData()" id="exportBtn">تصدير بياناتي</button>
 <button onclick="clearData()" id="clearBtn">حذف جميع السجلات</button>
 </div>
 </section>
 
-<section id="plans" hidden>
-<div class="card">
-<h2>Future Self Free</h2>
-<h3>0 $</h3>
-<p id="freeFeatures">التحليل المحلي، حفظ السجلات، متابعة الإنسان والحيوانات، أربع لغات.</p>
-<badge></badge>
-</div>
-<div class="card premium">
-<h2 class="lock">⭐ Future Self Premium</h2>
-<h3 id="premiumPrice">السعر يحدد لاحقاً</h3>
-<p id="premiumFeatures">تحليل متقدم، مساعد ذكي، تقارير مفصلة، خطط شخصية، وتحليل الأنماط عبر الزمن.</p>
-<p class="small" id="premiumNote">الاشتراك المدفوع لم يُفعّل بعد. لن يتم تحصيل أي مبلغ.</p>
-</div>
-<div class="card">
-<h2 id="privacyTitle">🔐 خصوصيتك</h2>
-<p id="privacyText">بياناتك محفوظة على هاتفك افتراضياً.</p>
+<section id="premium">
+<h2 id="premiumTitle">⭐ Future Self Premium</h2>
+<p id="premiumText">نسعى إلى تطوير أدوات أكثر تقدمًا لفهم الذات ومتابعة الحيوانات.</p>
+<p id="premiumStatus">النسخة الحالية مجانية، والتحليل الحالي محلي وأولي. خدمات الذكاء الاصطناعي السحابي والدفع غير مفعّلة بعد.</p>
 <label>
-<input type="checkbox" id="cloudConsent" style="width:auto">
-<span id="consentText">أوافق على مشاركة معلوماتي مع خدمة سحابية عند تفعيلها مستقبلاً.</span>
+<input type="checkbox" id="consent" style="width:auto">
+<span id="consentText">أوافق مستقبلًا على استخدام خدمات سحابية بعد توضيح طريقة معالجة بياناتي.</span>
 </label>
-<button class="action" onclick="saveConsent()" id="consentButton">حفظ اختياري</button>
-<p class="small" id="consentStatus"></p>
-</div>
+<p class="small" id="privacyText">لا يرسل هذا الخيار بياناتك. سجلاتك تبقى محليًا على جهازك.</p>
 </section>
+
 </main>
 
 <footer>Future Self © 2026 — Your journey starts today.</footer>
 
 <script>
-const T={
+const translations = {
 ar:{
-tag:"افهم نفسك. ابنِ مستقبلك.",human:"🧠 الإنسان",animal:"🐾 الحيوانات",history:"📚 سجلاتي",plans:"⭐ Premium",
-ht:"اكتشف نفسك",hd:"ابدأ بفهم وضعك الحالي وأهدافك.",
-ml:"كيف تشعر اليوم؟",gl:"ما هدفك في الحياة؟",cl:"ما أكبر تحدٍ تواجهه؟",
-hs:"احفظ سجلك",ah:"🧠 حلّل وضعي",
-at:"افهم حيوانك",ad:"تابع سلوك حيوانك وتغيراته اليومية.",
-tl:"نوع الحيوان",al:"العمر",bl:"السلوك اليوم",hl:"الصحة والنشاط",
-as:"احفظ المتابعة",aa:"🐾 حلّل سلوك الحيوان",
-his:"سجلاتك السابقة",ex:"تصدير بياناتي",del:"حذف جميع السجلات",
-free:"التحليل المحلي، حفظ السجلات، متابعة الإنسان والحيوانات، أربع لغات.",
-price:"السعر يحدد لاحقاً",
-pf:"تحليل متقدم، مساعد ذكي، تقارير مفصلة، خطط شخصية، وتحليل الأنماط عبر الزمن.",
-pn:"الاشتراك المدفوع لم يُفعّل بعد. لن يتم تحصيل أي مبلغ.",
-pt:"🔐 خصوصيتك",px:"بياناتك محفوظة على هاتفك افتراضياً.",
-ct:"أوافق على مشاركة معلوماتي مع خدمة سحابية عند تفعيلها مستقبلاً.",
-cb:"حفظ اختياري",cs:"تم حفظ اختيارك. لا يتم إرسال أي بيانات حالياً.",
-saved:"تم حفظ السجل.",empty:"لا توجد سجلات.",
-need:"اكتب بعض المعلومات أولاً.",
-local:"🧠 التحليل المحلي الأولي:",
-goal:"حاول تقسيم هدفك إلى خطوات صغيرة قابلة للتنفيذ.",
-challenge:"حدد التحدي الرئيسي واختر خطوة واحدة للتعامل معه.",
-mood:"راقب مشاعرك لعدة أيام لمعرفة الأنماط المتكررة.",
-positive:"حاول المحافظة على العادات التي تدعم حالتك الجيدة.",
-neutral:"استمر في تدوين حالتك يومياً لتتعرف على التغيرات.",
-animalAdvice:"راقب الأكل والنوم والحركة والسلوك، وقارنها بالأيام السابقة.",
-vet:"إذا لاحظت ألماً أو صعوبة في التنفس أو تدهوراً واضحاً، تواصل مع طبيب بيطري.",
-cloud:"التحليل السحابي غير متصل بعد. سنضيف خادماً آمناً في مرحلة لاحقة. لم تُرسل معلوماتك."
-},
-es:{
-tag:"Compréndete. Construye tu futuro.",human:"🧠 Personas",animal:"🐾 Animales",history:"📚 Mis registros",plans:"⭐ Premium",
-ht:"Descúbrete",hd:"Comprende tu situación y tus objetivos.",
-ml:"¿Cómo te sientes hoy?",gl:"¿Cuál es tu objetivo?",cl:"¿Cuál es tu mayor desafío?",
-hs:"Guardar registro",ah:"🧠 Analizar mi situación",
-at:"Comprende a tu animal",ad:"Observa su comportamiento diario.",
-tl:"Tipo de animal",al:"Edad",bl:"Comportamiento de hoy",hl:"Salud y actividad",
-as:"Guardar seguimiento",aa:"🐾 Analizar comportamiento",
-his:"Registros anteriores",ex:"Exportar datos",del:"Eliminar registros",
-free:"Análisis local, registros, seguimiento humano y animal, cuatro idiomas.",
-price:"Precio por definir",pf:"Análisis avanzado, asistente inteligente, informes y planes personalizados.",
-pn:"La suscripción todavía no está activa. No se realizará ningún cobro.",
-pt:"🔐 Tu privacidad",px:"Tus datos permanecen en tu teléfono por defecto.",
-ct:"Acepto compartir mis datos con un servicio en la nube cuando esté disponible.",
-cb:"Guardar preferencia",cs:"Preferencia guardada. No se envían datos actualmente.",
-saved:"Registro guardado.",empty:"No hay registros.",need:"Escribe información primero.",
-local:"🧠 Análisis local inicial:",goal:"Divide tu objetivo en pasos pequeños y alcanzables.",
-challenge:"Identifica el principal desafío y elige un paso para afrontarlo.",
-mood:"Registra tus emociones varios días para identificar patrones.",
-positive:"Mantén los hábitos que favorecen tu bienestar.",
-neutral:"Continúa registrando tu estado diariamente.",
-animalAdvice:"Observa alimentación, sueño, movimiento y comportamiento.",
-vet:"Ante dolor o deterioro evidente, consulta a un veterinario.",
-cloud:"El análisis en la nube todavía no está conectado. No se han enviado datos."
-},
-fr:{
-tag:"Comprends-toi. Construis ton avenir.",human:"🧠 Humain",animal:"🐾 Animaux",history:"📚 Mes données",plans:"⭐ Premium",
-ht:"Découvre-toi",hd:"Comprends ta situation et tes objectifs.",
-ml:"Comment te sens-tu ?",gl:"Quel est ton objectif ?",cl:"Ton plus grand défi ?",
-hs:"Enregistrer",ah:"🧠 Analyser ma situation",
-at:"Comprendre ton animal",ad:"Observe son comportement quotidien.",
-tl:"Type d'animal",al:"Âge",bl:"Comportement du jour",hl:"Santé et activité",
-as:"Enregistrer le suivi",aa:"🐾 Analyser le comportement",
-his:"Historique",ex:"Exporter mes données",del:"Tout supprimer",
-free:"Analyse locale, suivi humain et animal, quatre langues.",
-price:"Prix à définir",pf:"Analyse avancée, assistant intelligent, rapports et plans personnalisés.",
-pn:"L'abonnement n'est pas encore actif. Aucun paiement ne sera effectué.",
-pt:"🔐 Ta confidentialité",px:"Tes données restent sur ton téléphone par défaut.",
-ct:"J'accepte le partage de mes données avec un service cloud lorsqu'il sera disponible.",
-cb:"Enregistrer",cs:"Préférence enregistrée. Aucune donnée n'est envoyée actuellement.",
-saved:"Enregistrement réussi.",empty:"Aucun enregistrement.",need:"Saisis d'abord des informations.",
-local:"🧠 Analyse locale initiale:",goal:"Divise ton objectif en petites étapes réalisables.",
-challenge:"Identifie le défi principal et choisis une première action.",
-mood:"Note tes émotions pendant plusieurs jours pour repérer des tendances.",
-positive:"Conserve les habitudes qui favorisent ton bien-être.",
-neutral:"Continue à noter ton état quotidiennement.",
-animalAdvice:"Observe l'alimentation, le sommeil, les mouvements et le comportement.",
-vet:"En cas de douleur ou de détérioration, consulte un vétérinaire.",
-cloud:"L'analyse cloud n'est pas encore connectée. Aucune donnée n'a été envoyée."
+tagline:"افهم نفسك. ابنِ مستقبلك.",human:"🧠 الإنسان",animal:"🐾 الحيوانات",history:"📚 سجلاتي",premium:"⭐ Premium",
+humanTitle:"اكتشف نفسك",humanIntro:"ابدأ بفهم وضعك الحالي وأهدافك.",
+mood:"كيف تشعر اليوم؟",goal:"ما هدفك في الحياة؟",challenge:"ما أكبر تحدٍ تواجهه؟",
+moodPlaceholder:"اكتب شعورك...",save:"احفظ سجلك",analyze:"🧠 حلّل وضعي",
+animalTitle:"فهم حيوانك الأليف 🐾",animalIntro:"سجّل ملاحظاتك لمتابعة سلوك حيوانك.",
+animalType:"نوع الحيوان",animalName:"اسم الحيوان",animalAge:"العمر",behavior:"السلوك الذي لاحظته",health:"ملاحظات عن حالته وراحته",
+saveAnimal:"احفظ الملاحظة",analyzeAnimal:"حلّل الملاحظة",
+historyTitle:"📚 سجلاتك السابقة",historyIntro:"بياناتك محفوظة على هذا الجهاز.",
+export:"تصدير بياناتي",clear:"حذف جميع السجلات",premiumTitle:"⭐ Future Self Premium",
+premiumText:"نسعى إلى تطوير أدوات أكثر تقدمًا لفهم الذات ومتابعة الحيوانات.",
+premiumStatus:"النسخة الحالية مجانية، والتحليل الحالي محلي وأولي. خدمات الذكاء الاصطناعي السحابي والدفع غير مفعّلة بعد.",
+consent:"أوافق مستقبلًا على استخدام خدمات سحابية بعد توضيح طريقة معالجة بياناتي.",
+privacy:"لا يرسل هذا الخيار بياناتك. سجلاتك تبقى محليًا على جهازك.",
+saved:"تم حفظ السجل بنجاح.",need:"اكتب بعض المعلومات أولاً حتى نتمكن من التحليل.",
+local:"🧠 التحليل المحلي الأولي:",goalTip:"حاول تقسيم هدفك إلى خطوات صغيرة قابلة للتنفيذ.",
+challengeTip:"حدد التحدي الرئيسي واختر خطوة واحدة للتعامل معه.",
+moodTip:"راقب مشاعرك لعدة أيام لمعرفة الأنماط المتكررة.",
+memory:"📚 الذاكرة الشخصية:",count:"عدد سجلاتك السابقة: ",
+first:"هذه أول ملاحظاتك. سجّل معلوماتك بانتظام حتى نتمكن من متابعة التغيّر.",
+comparison:"مقارنة مع آخر سجل سابق:",sameGoal:"هدفك لم يتغير منذ آخر سجل.",newGoal:"هناك اختلاف في هدفك عن آخر سجل.",
+sameMood:"شعورك مشابه لما سجلته سابقًا.",newMood:"شعورك مختلف عن آخر سجل.",
+sameChallenge:"التحدي الذي ذكرته ما زال قائمًا.",newChallenge:"التحدي الحالي مختلف عن السابق.",
+next:"🎯 الخطوة القادمة: سجّل وضعك بانتظام وراجع التغيّرات مع مرور الوقت.",
+animalSaved:"تم حفظ ملاحظة الحيوان.",animalNeed:"اكتب سلوكًا أو ملاحظة أولاً.",
+animalAdvice:"تابع السلوك وسجّل متى يحدث وما الذي يسبقه. إذا ظهرت علامات ألم أو تغير مفاجئ أو توقف عن الأكل، تواصل مع طبيب بيطري.",
+noRecords:"لا توجد سجلات بعد.",confirm:"هل أنت متأكد من حذف جميع السجلات؟ هذا الإجراء لا يمكن التراجع عنه.",
+humanRecord:"الإنسان",dog:"كلب",cat:"قط",animalRecord:"الحيوان",exported:"تم تجهيز ملف البيانات."
 },
 en:{
-tag:"Understand yourself. Build your future.",human:"🧠 Human",animal:"🐾 Animals",history:"📚 My records",plans:"⭐ Premium",
-ht:"Discover yourself",hd:"Understand your current situation and goals.",
-ml:"How do you feel today?",gl:"What is your life goal?",cl:"What is your biggest challenge?",
-hs:"Save record",ah:"🧠 Analyze my situation",
-at:"Understand your animal",ad:"Track daily behavior.",
-tl:"Animal type",al:"Age",bl:"Today's behavior",hl:"Health and activity",
-as:"Save follow-up",aa:"🐾 Analyze behavior",
-his:"Previous records",ex:"Export my data",del:"Delete all records",
-free:"Local analysis, records, human and animal tracking, four languages.",
-price:"Price to be decided",pf:"Advanced analysis, smart assistant, reports and personal plans.",
-pn:"Paid subscription is not active yet. No payment will be charged.",
-pt:"🔐 Your privacy",px:"Your data stays on your phone by default.",
-ct:"I agree to share my information with a cloud service when available.",
-cb:"Save preference",cs:"Preference saved. No data is currently sent.",
-saved:"Record saved.",empty:"No records yet.",need:"Enter some information first.",
-local:"🧠 Initial local analysis:",
-goal:"Break your goal into small, achievable steps.",
-challenge:"Identify your main challenge and choose one first action.",
-mood:"Track your emotions for several days to identify patterns.",
-positive:"Keep habits that support your wellbeing.",
-neutral:"Continue recording your state each day.",
-animalAdvice:"Observe eating, sleep, movement and behavior.",
-vet:"For pain or obvious deterioration, contact a veterinarian.",
-cloud:"Cloud analysis is not connected yet. No information has been sent."
+tagline:"Understand yourself. Build your future.",human:"🧠 Human",animal:"🐾 Animals",history:"📚 My records",premium:"⭐ Premium",
+humanTitle:"Discover yourself",humanIntro:"Start understanding your current situation and goals.",
+mood:"How do you feel today?",goal:"What is your life goal?",challenge:"What is your biggest challenge?",
+moodPlaceholder:"Write how you feel...",save:"Save record",analyze:"🧠 Analyze my situation",
+animalTitle:"Understand your pet 🐾",animalIntro:"Record observations to follow your pet's behavior.",
+animalType:"Animal type",animalName:"Animal name",animalAge:"Age",behavior:"Observed behavior",health:"Health and comfort notes",
+saveAnimal:"Save observation",analyzeAnimal:"Analyze observation",
+historyTitle:"📚 Previous records",historyIntro:"Your data is saved on this device.",
+export:"Export my data",clear:"Delete all records",premiumTitle:"⭐ Future Self Premium",
+premiumText:"We aim to develop more advanced tools for self-understanding and animal tracking.",
+premiumStatus:"The current version is free and its analysis is preliminary and local. Cloud AI and payments are not enabled.",
+consent:"I agree to possible future cloud services after their data practices are explained.",
+privacy:"This option does not send your data. Your records remain on this device.",
+saved:"Record saved successfully.",need:"Enter some information first.",
+local:"🧠 Initial local analysis:",goalTip:"Try breaking your goal into small, actionable steps.",
+challengeTip:"Identify the main challenge and choose one step to address it.",
+moodTip:"Track your feelings for several days to notice recurring patterns.",
+memory:"📚 Personal memory:",count:"Previous records: ",
+first:"These are your first notes. Record regularly to track changes.",
+comparison:"Comparison with your latest previous record:",sameGoal:"Your goal has not changed.",newGoal:"Your goal differs from the previous record.",
+sameMood:"Your feeling is similar to the previous record.",newMood:"Your feeling differs from the previous record.",
+sameChallenge:"The challenge is still present.",newChallenge:"Your current challenge differs from the previous one.",
+next:"🎯 Next step: Record regularly and review changes over time.",
+animalSaved:"Animal observation saved.",animalNeed:"Enter a behavior or observation first.",
+animalAdvice:"Track when the behavior occurs and what happens before it. Contact a veterinarian if you notice pain, sudden changes, or loss of appetite.",
+noRecords:"No records yet.",confirm:"Are you sure you want to delete all records? This cannot be undone.",
+humanRecord:"Human",dog:"Dog",cat:"Cat",animalRecord:"Animal",exported:"Your data file is ready."
+},
+es:{
+tagline:"Compréndete. Construye tu futuro.",human:"🧠 Persona",animal:"🐾 Animales",history:"📚 Mis registros",premium:"⭐ Premium",
+humanTitle:"Descúbrete",humanIntro:"Empieza por comprender tu situación y tus objetivos.",
+mood:"¿Cómo te sientes hoy?",goal:"¿Cuál es tu objetivo en la vida?",challenge:"¿Cuál es tu mayor desafío?",
+moodPlaceholder:"Escribe cómo te sientes...",save:"Guardar registro",analyze:"🧠 Analizar mi situación",
+animalTitle:"Comprende a tu mascota 🐾",animalIntro:"Registra observaciones sobre su comportamiento.",
+animalType:"Tipo de animal",animalName:"Nombre",animalAge:"Edad",behavior:"Comportamiento observado",health:"Notas sobre su salud y bienestar",
+saveAnimal:"Guardar observación",analyzeAnimal:"Analizar observación",
+historyTitle:"📚 Registros anteriores",historyIntro:"Tus datos se guardan en este dispositivo.",
+export:"Exportar mis datos",clear:"Eliminar todos los registros",premiumTitle:"⭐ Future Self Premium",
+premiumText:"Buscamos desarrollar herramientas avanzadas para el autoconocimiento y seguimiento animal.",
+premiumStatus:"La versión actual es gratuita y el análisis es local y preliminar. La IA en la nube y los pagos aún no están activos.",
+consent:"Acepto posibles servicios en la nube en el futuro, después de conocer cómo se tratarán mis datos.",
+privacy:"Esta opción no envía tus datos. Tus registros permanecen en este dispositivo.",
+saved:"Registro guardado.",need:"Escribe alguna información primero.",
+local:"🧠 Análisis local inicial:",goalTip:"Divide tu objetivo en pequeños pasos realizables.",
+challengeTip:"Identifica el principal desafío y elige un paso para afrontarlo.",
+moodTip:"Observa tus emociones durante varios días para identificar patrones.",
+memory:"📚 Memoria personal:",count:"Registros anteriores: ",
+first:"Estas son tus primeras notas. Registra información regularmente para observar cambios.",
+comparison:"Comparación con el último registro:",sameGoal:"Tu objetivo no ha cambiado.",newGoal:"Tu objetivo es diferente al registro anterior.",
+sameMood:"Tu estado de ánimo es similar al anterior.",newMood:"Tu estado de ánimo es diferente al anterior.",
+sameChallenge:"El desafío sigue presente.",newChallenge:"El desafío actual es diferente.",
+next:"🎯 Próximo paso: registra tu situación regularmente.",
+animalSaved:"Observación guardada.",animalNeed:"Escribe primero una observación.",
+animalAdvice:"Registra cuándo ocurre el comportamiento. Consulta a un veterinario si observas dolor, cambios repentinos o falta de apetito.",
+noRecords:"Todavía no hay registros.",confirm:"¿Seguro que deseas eliminar todos los registros? No se puede deshacer.",
+humanRecord:"Persona",dog:"Perro",cat:"Gato",animalRecord:"Animal",exported:"Archivo de datos preparado."
+},
+fr:{
+tagline:"Comprends-toi. Construis ton avenir.",human:"🧠 Humain",animal:"🐾 Animaux",history:"📚 Mes données",premium:"⭐ Premium",
+humanTitle:"Découvre-toi",humanIntro:"Commence par comprendre ta situation et tes objectifs.",
+mood:"Comment te sens-tu aujourd'hui ?",goal:"Quel est ton objectif dans la vie ?",challenge:"Quel est ton plus grand défi ?",
+moodPlaceholder:"Décris ton état...",save:"Enregistrer",analyze:"🧠 Analyser ma situation",
+animalTitle:"Comprendre ton animal 🐾",animalIntro:"Note tes observations sur son comportement.",
+animalType:"Type d'animal",animalName:"Nom",animalAge:"Âge",behavior:"Comportement observé",health:"Notes sur sa santé et son bien-être",
+saveAnimal:"Enregistrer l'observation",analyzeAnimal:"Analyser l'observation",
+historyTitle:"📚 Historique",historyIntro:"Tes données sont enregistrées sur cet appareil.",
+export:"Exporter mes données",clear:"Supprimer tous les enregistrements",premiumTitle:"⭐ Future Self Premium",
+premiumText:"Nous souhaitons développer des outils avancés pour mieux se comprendre et suivre les animaux.",
+premiumStatus:"La version actuelle est gratuite et l'analyse est locale et préliminaire. L'IA cloud et les paiements ne sont pas activés.",
+consent:"J'accepte d'éventuels services cloud après explication du traitement des données.",
+privacy:"Cette option n'envoie aucune donnée. Tes enregistrements restent sur cet appareil.",
+saved:"Enregistrement sauvegardé.",need:"Écris d'abord quelques informations.",
+local:"🧠 Analyse locale initiale :",goalTip:"Divise ton objectif en petites étapes réalisables.",
+challengeTip:"Identifie le principal défi et choisis une action pour y répondre.",
+moodTip:"Observe tes émotions pendant plusieurs jours pour repérer des tendances.",
+memory:"📚 Mémoire personnelle :",count:"Enregistrements précédents : ",
+first:"Voici tes premières notes. Enregistre régulièrement pour suivre les changements.",
+comparison:"Comparaison avec le dernier enregistrement :",sameGoal:"Ton objectif n'a pas changé.",newGoal:"Ton objectif est différent du précédent.",
+sameMood:"Ton sentiment ressemble au précédent.",newMood:"Ton sentiment est différent du précédent.",
+sameChallenge:"Le défi est toujours présent.",newChallenge:"Le défi actuel est différent.",
+next:"🎯 Prochaine étape : note régulièrement ta situation.",
+animalSaved:"Observation enregistrée.",animalNeed:"Écris d'abord une observation.",
+animalAdvice:"Note quand le comportement se produit. Consulte un vétérinaire en cas de douleur, de changement soudain ou de perte d'appétit.",
+noRecords:"Aucun enregistrement pour le moment.",confirm:"Veux-tu vraiment supprimer tous les enregistrements ? Cette action est irréversible.",
+humanRecord:"Humain",dog:"Chien",cat:"Chat",animalRecord:"Animal",exported:"Fichier de données prêt."
 }
 };
 
-let lang="ar";
-let records=JSON.parse(localStorage.getItem("futureSelfRecords")||"[]");
+let lang = localStorage.getItem("futureSelfLanguage") || "ar";
+let records = [];
 
-function tr(){return T[lang]}
+try {
+  const stored = JSON.parse(localStorage.getItem("futureSelfRecords") || "[]");
+  records = Array.isArray(stored) ? stored : [];
+} catch(e) {
+  records = [];
+}
+
+function tr(){return translations[lang] || translations.ar;}
+
+function setText(id,value){
+  const el=document.getElementById(id);
+  if(el) el.textContent=value;
+}
+
 function changeLanguage(){
-lang=document.getElementById("language").value;
-const t=tr();
-document.documentElement.lang=lang;
-document.documentElement.dir=lang==="ar"?"rtl":"ltr";
-const map={
-tagline:"tag",humanBtn:"human",animalBtn:"animal",historyBtn:"history",plansBtn:"plans",
-humanTitle:"ht",humanDesc:"hd",moodLabel:"ml",goalLabel:"gl",challengeLabel:"cl",
-humanSave:"hs",analyzeHuman:"ah",animalTitle:"at",animalDesc:"ad",
-typeLabel:"tl",ageLabel:"al",behaviorLabel:"bl",healthLabel:"hl",
-animalSave:"as",analyzeAnimal:"aa",historyTitle:"his",exportBtn:"ex",
-clearBtn:"del",freeFeatures:"free",premiumPrice:"price",premiumFeatures:"pf",
-premiumNote:"pn",privacyTitle:"pt",privacyText:"px",consentText:"ct",consentButton:"cb"
-};
-for(const id in map)document.getElementById(id).textContent=t[map[id]];
-renderRecords();
+  lang=document.getElementById("language").value;
+  localStorage.setItem("futureSelfLanguage",lang);
+  document.documentElement.lang=lang;
+  document.documentElement.dir=lang==="ar"?"rtl":"ltr";
+  const t=tr();
+  setText("tagline",t.tagline);
+  setText("navHuman",t.human);
+  setText("navAnimal",t.animal);
+  setText("navHistory",t.history);
+  setText("navPremium",t.premium);
+  setText("humanTitle",t.humanTitle);
+  setText("humanIntro",t.humanIntro);
+  setText("moodLabel",t.mood);
+  setText("goalLabel",t.goal);
+  setText("challengeLabel",t.challenge);
+  document.getElementById("mood").placeholder=t.moodPlaceholder;
+  setText("saveHumanBtn",t.save);
+  setText("analyzeHumanBtn",t.analyze);
+  setText("animalTitle",t.animalTitle);
+  setText("animalIntro",t.animalIntro);
+  setText("animalTypeLabel",t.animalType);
+  setText("animalNameLabel",t.animalName);
+  setText("animalAgeLabel",t.animalAge);
+  setText("behaviorLabel",t.behavior);
+  setText("healthLabel",t.health);
+  setText("saveAnimalBtn",t.saveAnimal);
+  setText("analyzeAnimalBtn",t.analyzeAnimal);
+  setText("historyTitle",t.historyTitle);
+  setText("historyIntro",t.historyIntro);
+  setText("exportBtn",t.export);
+  setText("clearBtn",t.clear);
+  setText("premiumTitle",t.premiumTitle);
+  setText("premiumText",t.premiumText);
+  setText("premiumStatus",t.premiumStatus);
+  setText("consentText",t.consent);
+  setText("privacyText",t.privacy);
+  renderRecords();
 }
 
-function showSection(s){
-["human","animal","history","plans"].forEach(x=>{
-document.getElementById(x).hidden=x!==s;
-document.getElementById(x+"Btn").classList.toggle("active",x===s);
-});
-if(s==="history")renderRecords();
+function showSection(id){
+  document.querySelectorAll("main section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  if(id==="history") renderRecords();
 }
 
-function save(data){
-records.unshift({date:new Date().toLocaleString(),...data});
-localStorage.setItem("futureSelfRecords",JSON.stringify(records));
+function saveRecord(record){
+  records.push(record);
+  localStorage.setItem("futureSelfRecords",JSON.stringify(records));
+  renderRecords();
 }
 
 function saveHuman(){
-save({type:"human",mood:mood.value,goal:goal.value,challenge:challenge.value});
-humanResult.textContent=tr().saved;
+  const mood=document.getElementById("mood").value.trim();
+  const goal=document.getElementById("goal").value.trim();
+  const challenge=document.getElementById("challenge").value.trim();
+  if(!mood&&!goal&&!challenge){
+    alert(tr().need);
+    return;
+  }
+  const now=Date.now();
+  saveRecord({
+    type:"human",kind:"human",
+    mood,goal,challenge,
+    createdAt:new Date(now).toISOString(),
+    timestamp:now
+  });
+  document.getElementById("humanResult").hidden=false;
+  document.getElementById("humanResult").textContent=tr().saved;
 }
 
-function saveAnimal(){
-save({type:"animal",animal:animalType.value,age:animalAge.value,behavior:behavior.value,health:health.value});
-animalResult.textContent=tr().saved;
+function getRecordTime(r){
+  if(typeof r.timestamp==="number") return r.timestamp;
+  if(r.createdAt && !isNaN(Date.parse(r.createdAt))) return Date.parse(r.createdAt);
+  if(r.date && !isNaN(Date.parse(r.date))) return Date.parse(r.date);
+  return 0;
 }
 
 function analyzeHuman(){
-const m=document.getElementById("mood").value.trim().toLowerCase();
-const g=document.getElementById("goal").value.trim();
-const c=document.getElementById("challenge").value.trim();
-if(!m&&!g&&!c){humanResult.textContent=tr().need;return;}
-let result=tr().local+"\n";
-if(g)result+="\n• "+tr().goal;
-if(c)result+="\n• "+tr().challenge;
-if(m){
-const positive=["سعيد","جيد","مرتاح","happy","good","bien","heureux","contento","feliz"];
-result+="\n• "+(positive.some(x=>m.includes(x))?tr().positive:tr().mood);
+  const mood=document.getElementById("mood").value.trim();
+  const goal=document.getElementById("goal").value.trim();
+  const challenge=document.getElementById("challenge").value.trim();
+  const out=document.getElementById("humanResult");
+  out.hidden=false;
+
+  if(!mood&&!goal&&!challenge){
+    out.textContent=tr().need;
+    return;
+  }
+
+  const humans=records
+    .filter(r=>(r.type==="human"||r.kind==="human"))
+    .sort((a,b)=>getRecordTime(b)-getRecordTime(a));
+
+  let result=tr().local+"\n";
+  if(goal) result+="\n• "+tr().goalTip;
+  if(challenge) result+="\n• "+tr().challengeTip;
+  if(mood) result+="\n• "+tr().moodTip;
+
+  result+="\n\n"+tr().memory;
+  result+="\n• "+tr().count+humans.length;
+
+  if(humans.length===0){
+    result+="\n• "+tr().first;
+  } else {
+    const previous=humans[0];
+    result+="\n\n"+tr().comparison;
+    if(goal && previous.goal){
+      result+="\n• "+(goal===previous.goal?tr().sameGoal:tr().newGoal);
+    }
+    if(mood && previous.mood){
+      result+="\n• "+(mood===previous.mood?tr().sameMood:tr().newMood);
+    }
+    if(challenge && previous.challenge){
+      result+="\n• "+(challenge===previous.challenge?tr().sameChallenge:tr().newChallenge);
+    }
+  }
+  result+="\n\n"+tr().next;
+  out.textContent=result;
 }
-humanResult.textContent=result;
+
+function saveAnimal(){
+  const animalType=document.getElementById("animalType").value;
+  const animalName=document.getElementById("animalName").value.trim();
+  const animalAge=document.getElementById("animalAge").value.trim();
+  const behavior=document.getElementById("behavior").value.trim();
+  const health=document.getElementById("health").value.trim();
+
+  if(!behavior&&!health){
+    alert(tr().animalNeed);
+    return;
+  }
+
+  const now=Date.now();
+  saveRecord({
+    type:"animal",kind:"animal",
+    animalType,animalName,animalAge,behavior,health,
+    createdAt:new Date(now).toISOString(),
+    timestamp:now
+  });
+  const out=document.getElementById("animalResult");
+  out.hidden=false;
+  out.textContent=tr().animalSaved;
 }
 
 function analyzeAnimal(){
-const b=document.getElementById("behavior").value.trim();
-const h=document.getElementById("health").value.trim();
-if(!b&&!h){animalResult.textContent=tr().need;return;}
-animalResult.textContent=tr().local+"\n\n• "+tr().animalAdvice+"\n\n⚠️ "+tr().vet;
+  const behavior=document.getElementById("behavior").value.trim();
+  const health=document.getElementById("health").value.trim();
+  const out=document.getElementById("animalResult");
+  out.hidden=false;
+  if(!behavior&&!health){
+    out.textContent=tr().animalNeed;
+    return;
+  }
+  out.textContent=tr().animalAdvice;
+}
+
+function escapeHTML(value){
+  return String(value??"").replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
 }
 
 function renderRecords(){
-const box=document.getElementById("records");
-box.replaceChildren();
-if(!records.length){box.textContent=tr().empty;return;}
-records.forEach(r=>{
-const card=document.createElement("div");
-card.className="card";
-const title=document.createElement("strong");
-title.textContent=(r.type==="human"?"🧠 ":"🐾 ")+r.date;
-card.appendChild(title);
-Object.entries(r).forEach(([k,v])=>{
-if(k==="type"||k==="date")return;
-const p=document.createElement("p");
-p.textContent=k+": "+v;
-card.appendChild(p);
-});
-box.appendChild(card);
-});
+  const list=document.getElementById("recordsList");
+  if(!list) return;
+  if(records.length===0){
+    list.textContent=tr().noRecords;
+    return;
+  }
+
+  const ordered=[...records].sort((a,b)=>getRecordTime(b)-getRecordTime(a));
+  list.innerHTML=ordered.map(r=>{
+    const type=r.type||r.kind||"human";
+    const isAnimal=type==="animal";
+    const icon=isAnimal?"🐾":"🧠";
+    const title=isAnimal?tr().animalRecord:tr().humanRecord;
+    const date=getRecordTime(r);
+    const dateText=date?new Date(date).toLocaleString():"";
+    let details="";
+    if(isAnimal){
+      details+=r.animalName?"<br> "+escapeHTML(r.animalName):"";
+      details+=r.behavior?"<br> "+escapeHTML(r.behavior):"";
+      details+=r.health?"<br> "+escapeHTML(r.health):"";
+    }else{
+      details+=r.mood?"<br> "+escapeHTML(r.mood):"";
+      details+=r.goal?"<br> "+escapeHTML(r.goal):"";
+      details+=r.challenge?"<br> "+escapeHTML(r.challenge):"";
+      details+=r.strength?"<br> "+escapeHTML(r.strength):"";
+    }
+    return `<div class="record"><strong>${icon} ${title}</strong><div class="small">${escapeHTML(dateText)}</div>${details}</div>`;
+  }).join("");
 }
 
 function exportData(){
-const blob=new Blob([JSON.stringify(records,null,2)],{type:"application/json"});
-const url=URL.createObjectURL(blob);
-const a=document.createElement("a");
-a.href=url;a.download="future-self-data.json";a.click();
-URL.revokeObjectURL(url);
+  const blob=new Blob([JSON.stringify(records,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download="future-self-data.json";
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 function clearData(){
-if(confirm("هل تريد حذف جميع السجلات؟")){
-records=[];
-localStorage.removeItem("futureSelfRecords");
-renderRecords();
-}
-}
-
-function saveConsent(){
-const accepted=document.getElementById("cloudConsent").checked;
-localStorage.setItem("futureSelfCloudConsent",accepted?"yes":"no");
-document.getElementById("consentStatus").textContent=tr().cs;
+  if(!confirm(tr().confirm)) return;
+  records=[];
+  localStorage.setItem("futureSelfRecords","[]");
+  renderRecords();
 }
 
-function requestCloudAnalysis(){
-if(localStorage.getItem("futureSelfCloudConsent")!=="yes"){
-alert("يجب الحصول على موافقة المستخدم أولاً.");
-return;
-}
-alert(tr().cloud);
-}
+document.getElementById("language").value=lang;
+document.getElementById("consent").checked=
+  localStorage.getItem("futureSelfConsent")==="true";
+document.getElementById("consent").addEventListener("change",function(){
+  localStorage.setItem("futureSelfConsent",this.checked?"true":"false");
+});
 
 changeLanguage();
-document.getElementById("cloudConsent").checked=
-localStorage.getItem("futureSelfCloudConsent")==="yes";
+showSection("human");
 </script>
 </body>
 </html>
